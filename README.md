@@ -1,5 +1,5 @@
-lesscss-maven-plugin
-====================
+LESS CSS Maven Plugin
+=====================
 
 
 
