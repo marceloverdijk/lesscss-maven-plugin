@@ -19,6 +19,8 @@ Declare the plugin and its goals. The process-sources phase is bound to by defau
         </executions>
     </plugin>
 
+To run the compiler manually just execute lesscss:compile
+
 
 Example configuration for web project
 -------------------------------------
@@ -61,7 +63,7 @@ All configuration options
 List sources
 ------------
 
-To list the LESS sources in your project the `lesscss:list` goal can be used. It lists the LESS sources and it's imports based on sourceDirectory and optionally includes and excludes configuration options.  
+To list the LESS sources in your project the lesscss:list goal can be used. It lists the LESS sources and it's imports based on sourceDirectory and optionally includes and excludes configuration options.  
 
 
 Support
