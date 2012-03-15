@@ -19,7 +19,7 @@ Declare the plugin and its goals. The process-sources phase is bound to by defau
         </executions>
     </plugin>
 
-To run the compiler manually just execute lesscss:compile
+To run the compiler manually just execute: mvn lesscss:compile
 
 
 Example configuration for web project
