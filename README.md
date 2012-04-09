@@ -26,9 +26,9 @@ Example configuration for web project
 -------------------------------------
 
     <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.0-beta-1</version>
+        <version>1.3.0</version>
         <configuration>
             <sourceDirectory>${project.basedir}/src/main/webapp/less</sourceDirectory>
             <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
