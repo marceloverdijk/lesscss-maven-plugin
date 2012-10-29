@@ -143,7 +143,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 				compileIfChanged(files, lessCompiler);
 			}
 
-			getLog().info("Compilation finished in " + (System.currentTimeMillis() - start) + " ms");
+			getLog().info("Complete Less compile job finished in " + (System.currentTimeMillis() - start) + " ms");
 		}
 	}
 
@@ -163,9 +163,11 @@ public class CompileMojo extends AbstractLessCssMojo {
 			try {
 				LessSource lessSource = new LessSource(input);
 				if (output.lastModified() < lessSource.getLastModifiedIncludingImports()) {
+					long compilationStarted = System.currentTimeMillis();
 					getLog().info("Compiling LESS source: " + file + "...");
 					lessCompiler.compile(lessSource, output, force);
 					buildContext.refresh(output);
+					getLog().info("Finished compilation to "+outputDirectory+" in " + (System.currentTimeMillis() - compilationStarted) + " ms");
 				}
 				else if (!watch) {
 						getLog().info("Bypassing LESS source: " + file + " (not modified)");
