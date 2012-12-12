@@ -64,4 +64,12 @@ public abstract class AbstractLessCssMojo extends AbstractMojo {
 		scanner.scan();
 		return scanner.getIncludedFiles();
 	}
+	
+	/**
+	 * Whether to skip plugin execution. 
+	 * This makes the build more controllable from profiles.
+	 * 
+	 * @parameter expression="${lesscss.skip}" default-value="false"
+	 */
+	protected boolean skip;
 }
