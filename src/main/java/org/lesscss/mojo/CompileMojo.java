@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.StringUtils;
 import org.lesscss.LessCompiler;
@@ -38,31 +40,45 @@ public class CompileMojo extends AbstractLessCssMojo {
 	/**
 	 * The directory for compiled CSS stylesheets.
 	 * 
-	 * @parameter expression="${lesscss.outputDirectory}" default-value="${project.build.directory}"
+	 * @parameter expression="${lesscss.outputDirectory}"
+	 *            default-value="${project.build.directory}"
 	 * @required
 	 */
 	private File outputDirectory;
 
 	/**
-	 * When <code>true</code> the LESS compiler will compress the CSS stylesheets.
+	 * When <code>true</code> the LESS compiler will compress the CSS
+	 * stylesheets.
 	 * 
 	 * @parameter expression="${lesscss.compress}" default-value="false"
 	 */
 	private boolean compress;
 
 	/**
-	 * The character encoding the LESS compiler will use for writing the CSS stylesheets.
+	 * The character encoding the LESS compiler will use for writing the CSS
+	 * stylesheets.
 	 * 
-	 * @parameter expression="${lesscss.encoding}" default-value="${project.build.sourceEncoding}"
+	 * @parameter expression="${lesscss.encoding}"
+	 *            default-value="${project.build.sourceEncoding}"
 	 */
 	private String encoding;
 
 	/**
-	 * When <code>true</code> forces the LESS compiler to always compile the LESS sources. By default LESS sources are only compiled when modified (including imports) or the CSS stylesheet does not exists.
+	 * When <code>true</code> forces the LESS compiler to always compile the
+	 * LESS sources. By default LESS sources are only compiled when modified
+	 * (including imports) or the CSS stylesheet does not exists.
 	 * 
 	 * @parameter expression="${lesscss.force}" default-value="false"
 	 */
 	private boolean force;
+
+	/**
+	 * When <code>true</code> Concatenates the less-files into a single file
+	 * before compile to CSS.
+	 * 
+	 * @parameter expression="${lesscss.concatenate}" default-value="false"
+	 */
+	private boolean concatenate;
 
 	/**
 	 * The location of the LESS JavasSript file.
@@ -88,9 +104,29 @@ public class CompileMojo extends AbstractLessCssMojo {
 			getLog().debug("excludes = " + Arrays.toString(excludes));
 			getLog().debug("force = " + force);
 			getLog().debug("lessJs = " + lessJs);
+			getLog().debug("concatenate = " + concatenate);
 		}
 
 		String[] files = getIncludedFiles();
+
+		if (concatenate) {
+			try {
+
+				String tmpPath =  "less.less";
+				File tmpFile = new File(sourceDirectory, tmpPath);
+				tmpFile.delete();
+				System.out.println(tmpFile.getAbsolutePath());
+				for (String path : files) {
+					File original = new File(sourceDirectory, path);
+					System.out.println(original.getAbsolutePath());
+					String content = FileUtils.readFileToString(original);
+					FileUtils.write(tmpFile, content, true);
+				}
+				files = new String[] { tmpPath };
+			} catch (IOException ioe) {
+				getLog().error("Error concatenating files", ioe);
+			}
+		}
 
 		if (files == null || files.length < 1) {
 			getLog().info("Nothing to compile - no LESS sources found");
@@ -108,7 +144,8 @@ public class CompileMojo extends AbstractLessCssMojo {
 					lessCompiler.setLessJs(lessJs.toURI().toURL());
 				} catch (MalformedURLException e) {
 					throw new MojoExecutionException(
-							"Error while loading LESS JavaScript: " + lessJs.getAbsolutePath(), e);
+							"Error while loading LESS JavaScript: "
+									+ lessJs.getAbsolutePath(), e);
 				}
 			}
 
@@ -117,37 +154,51 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 				buildContext.removeMessages(input);
 
-				File output = new File(outputDirectory, file.replace(".less", ".css"));
+				File output = new File(outputDirectory, file.replace(".less",
+						".css"));
 
-				if (!output.getParentFile().exists() && !output.getParentFile().mkdirs()) {
-					throw new MojoExecutionException("Cannot create output directory " + output.getParentFile());
+				if (!output.getParentFile().exists()
+						&& !output.getParentFile().mkdirs()) {
+					throw new MojoExecutionException(
+							"Cannot create output directory "
+									+ output.getParentFile());
 				}
 
 				try {
 					LessSource lessSource = new LessSource(input);
 
-					if (output.lastModified() < lessSource.getLastModifiedIncludingImports()) {
+					if (output.lastModified() < lessSource
+							.getLastModifiedIncludingImports()) {
 						getLog().info("Compiling LESS source: " + file + "...");
 						lessCompiler.compile(lessSource, output, force);
 						buildContext.refresh(output);
-					}
-					else {
-						getLog().info("Bypassing LESS source: " + file + " (not modified)");
+					} else {
+						getLog().info(
+								"Bypassing LESS source: " + file
+										+ " (not modified)");
 					}
 				} catch (IOException e) {
-					buildContext.addMessage(input, 0, 0, "Error compiling LESS source", BuildContext.SEVERITY_ERROR, e);
-					throw new MojoExecutionException("Error while compiling LESS source: " + file, e);
+					buildContext.addMessage(input, 0, 0,
+							"Error compiling LESS source",
+							BuildContext.SEVERITY_ERROR, e);
+					throw new MojoExecutionException(
+							"Error while compiling LESS source: " + file, e);
 				} catch (LessException e) {
 					String message = e.getMessage();
 					if (StringUtils.isEmpty(message)) {
 						message = "Error compiling LESS source";
 					}
-					buildContext.addMessage(input, 0, 0, "Error compiling LESS source", BuildContext.SEVERITY_ERROR, e);
-					throw new MojoExecutionException("Error while compiling LESS source: " + file, e);
+					buildContext.addMessage(input, 0, 0,
+							"Error compiling LESS source",
+							BuildContext.SEVERITY_ERROR, e);
+					throw new MojoExecutionException(
+							"Error while compiling LESS source: " + file, e);
 				}
 			}
 
-			getLog().info("Compilation finished in " + (System.currentTimeMillis() - start) + " ms");
+			getLog().info(
+					"Compilation finished in "
+							+ (System.currentTimeMillis() - start) + " ms");
 		}
 	}
 }
