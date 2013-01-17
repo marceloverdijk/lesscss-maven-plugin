@@ -58,6 +58,7 @@ All configuration options
 + force (boolean) - When true forces the LESS compiler to always compile the LESS sources. By default LESS sources are only compiled when modified (including imports) or the CSS stylesheet does not exists. Default value is: false.
 + includes (String[]) - List of files to include. Specified as fileset patterns which are relative to the source directory. Default value is: { "**\/*.less" }
 + lessJs (String) - The location of the LESS JavasSript file.
++ concatenate (boolean) - When true all less-files will be concatenated into a single file before compiling to css
 
 
 List sources
