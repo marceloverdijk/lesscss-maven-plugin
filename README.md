@@ -59,7 +59,8 @@ All configuration options
 + includes (String[]) - List of files to include. Specified as fileset patterns which are relative to the source directory. Default value is: { "**\/*.less" }
 + lessJs (String) - The location of the LESS JavasSript file.
 + concatenate (boolean) - When true all less-files will be concatenated into a single file before compiling to css
-
+++ watch (boolean) - When true the plugin watches the sourceDirectory and recompiles the included files after they changed. Instead of configuring it in the pom you can use that option at the command line like this "mvn lesscss:compile -Dlesscss.watch=true". Then it doesn't interfere with other maven lifecycle phases and you can just kill the watch process e.g. with crtl-c. Default value is: false.
+++ watchInterval (int) - The interval in milliseconds the plugin waits between the check for file changes. Default value is: 1000 ms.
 
 List sources
 ------------
