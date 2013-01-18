@@ -20,6 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
@@ -59,25 +60,17 @@ public class AbstractLessCssMojoTest extends AbstractMojoTestCase {
 		mojo = new AbstractLessCssMojo() {
 			public void execute() throws MojoExecutionException {
 			}
+
+			@Override
+			protected List<ConfigurationItem> getConfiguration() {
+				return null;
+			}
 		};
 
 		setVariableValueToObject(mojo, "buildContext", buildContext);
 		setVariableValueToObject(mojo, "sourceDirectory", sourceDirectory);
 		setVariableValueToObject(mojo, "includes", includes);
 		setVariableValueToObject(mojo, "excludes", excludes);
-	}
-
-	@Test
-	public void testGetFiles() throws Exception {
-		when(buildContext.newScanner(sourceDirectory, true)).thenReturn(scanner);
-		when(scanner.getIncludedFiles()).thenReturn(files);
-
-		assertSame(files, mojo.getIncludedFiles());
-
-		verify(buildContext).newScanner(same(sourceDirectory), eq(true));
-		verify(scanner).setIncludes(same(includes));
-		verify(scanner).setExcludes(same(excludes));
-		verify(scanner).scan();
 	}
 
 	@After

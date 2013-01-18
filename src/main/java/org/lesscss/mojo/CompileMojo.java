@@ -17,7 +17,9 @@ package org.lesscss.mojo;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -35,6 +37,8 @@ import org.sonatype.plexus.build.incremental.BuildContext;
  * @phase process-sources
  */
 public class CompileMojo extends AbstractLessCssMojo {
+
+	private static final int WATCH_INTERVAL_DEFAULT = 1000;
 
 	/**
 	 * The directory for compiled CSS stylesheets.
@@ -65,7 +69,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 	*
 	* @parameter expression="${lesscss.watchInterval}" default-value="1000"
 	*/
-	private int watchInterval = 1000;
+	private int watchInterval = WATCH_INTERVAL_DEFAULT;
 
 	/**
 	 * The character encoding the LESS compiler will use for writing the CSS
@@ -110,91 +114,100 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 		long start = System.currentTimeMillis();
 
-		if (getLog().isDebugEnabled()) {
-			getLog().debug("sourceDirectory = " + sourceDirectory);
-			getLog().debug("outputDirectory = " + outputDirectory);
-			getLog().debug("includes = " + Arrays.toString(includes));
-			getLog().debug("excludes = " + Arrays.toString(excludes));
-			getLog().debug("force = " + force);
-			getLog().debug("lessJs = " + lessJs);
-			getLog().debug("concatenate = " + concatenate);
-			getLog().debug("watch = " + watch);
-			getLog().debug("watchInterval = " + watchInterval);
+		List<ConfigurationItem> configurationItems = getConfiguration();
+
+		if (configurationItems.size() == 0) {
+			return;
 		}
 
-		String[] files = getIncludedFiles();
-
-		if (concatenate) {
-			try {
-
-				String tmpPath = "less.less";
-				File tmpFile = new File(sourceDirectory, tmpPath);
-				tmpFile.delete();
-				System.out.println(tmpFile.getAbsolutePath());
-				for (String path : files) {
-					File original = new File(sourceDirectory, path);
-					System.out.println(original.getAbsolutePath());
-					String content = FileUtils.readFileToString(original);
-					FileUtils.write(tmpFile, content, true);
-				}
-				files = new String[] { tmpPath };
-			} catch (IOException ioe) {
-				getLog().error("Error concatenating files", ioe);
-			}
-		}
-
-		if (files == null || files.length < 1) {
-			getLog().info("Nothing to compile - no LESS sources found");
-		} else {
+		for (ConfigurationItem item : configurationItems) {
 			if (getLog().isDebugEnabled()) {
-				getLog().debug("included files = " + Arrays.toString(files));
+				getLog().debug("sourceDirectory = " + item.getSourceDirectory());
+				getLog().debug("outputDirectory = " + item.getOutputDirectory());
+				getLog().debug("includes = " + Arrays.toString(item.getIncludes()));
+				getLog().debug("excludes = " + Arrays.toString(item.getExcludes()));
+				getLog().debug("force = " + item.isForce());
+				getLog().debug("lessJs = " + item.getLessJs());
+				getLog().debug("concatenate = " + item.isConcatenate());
+				getLog().debug("watch = " + item.isWatch());
+				getLog().debug("watchInterval = " + item.getWatchInterval());
+				getLog().debug("compress = " + item.isCompress());
 			}
 
-			LessCompiler lessCompiler = new LessCompiler();
-			lessCompiler.setCompress(compress);
-			lessCompiler.setEncoding(encoding);
+			String[] files = getIncludedFiles(item);
 
-			if (lessJs != null) {
+			if (item.isConcatenate()) {
 				try {
-					lessCompiler.setLessJs(lessJs.toURI().toURL());
-				} catch (MalformedURLException e) {
-					throw new MojoExecutionException("Error while loading LESS JavaScript: "
-							+ lessJs.getAbsolutePath(), e);
+
+					String tmpPath = "less.less";
+					File tmpFile = new File(item.getSourceDirectory(), tmpPath);
+					tmpFile.delete();
+					System.out.println(tmpFile.getAbsolutePath());
+					for (String path : files) {
+						File original = new File(item.getSourceDirectory(), path);
+						System.out.println(original.getAbsolutePath());
+						String content = FileUtils.readFileToString(original);
+						FileUtils.write(tmpFile, content, true);
+					}
+					files = new String[] { tmpPath };
+				} catch (IOException ioe) {
+					getLog().error("Error concatenating files", ioe);
 				}
 			}
-			if (watch) {
-				getLog().info("Watching " + outputDirectory);
-				if (force) {
-					force = false;
-					getLog().info("Disabled the 'force' flag in watch mode.");
+
+			if (files == null || files.length < 1) {
+				getLog().info("Nothing to compile - no LESS sources found");
+			} else {
+				if (getLog().isDebugEnabled()) {
+					getLog().debug("included files = " + Arrays.toString(files));
 				}
-				Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-				while (watch && !Thread.currentThread().isInterrupted()) {
-					compileIfChanged(files, lessCompiler);
+
+				LessCompiler lessCompiler = new LessCompiler();
+				lessCompiler.setCompress(item.isCompress());
+				lessCompiler.setEncoding(item.getEncoding());
+
+				if (item.getLessJs() != null) {
 					try {
-						Thread.sleep(watchInterval);
-					} catch (InterruptedException e) {
-						System.out.println("interrupted");
+						lessCompiler.setLessJs(item.getLessJs().toURI().toURL());
+					} catch (MalformedURLException e) {
+						throw new MojoExecutionException("Error while loading LESS JavaScript: "
+								+ item.getLessJs().getAbsolutePath(), e);
 					}
 				}
-			} else {
-				compileIfChanged(files, lessCompiler);
-			}
+				if (item.isWatch()) {
+					getLog().info("Watching " + item.getOutputDirectory());
+					if (item.isForce()) {
+						force = false;
+						getLog().info("Disabled the 'force' flag in watch mode.");
+					}
+					Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+					while (item.isWatch() && !Thread.currentThread().isInterrupted()) {
+						compileIfChanged(files, lessCompiler, item);
+						try {
+							Thread.sleep(item.getWatchInterval());
+						} catch (InterruptedException e) {
+							System.out.println("interrupted");
+						}
+					}
+				} else {
+					compileIfChanged(files, lessCompiler, item);
+				}
 
-			getLog().info(
-					"Complete Less compile job finished in "
-							+ (System.currentTimeMillis() - start) + " ms");
+				getLog().info(
+						"Complete Less compile job finished in "
+								+ (System.currentTimeMillis() - start) + " ms");
+			}
 		}
 	}
 
-	private void compileIfChanged(String[] files, LessCompiler lessCompiler)
-			throws MojoExecutionException {
+	private void compileIfChanged(String[] files, LessCompiler lessCompiler,
+			ConfigurationItem item) throws MojoExecutionException {
 		for (String file : files) {
-			File input = new File(sourceDirectory, file);
+			File input = new File(item.getSourceDirectory(), file);
 
 			buildContext.removeMessages(input);
 
-			File output = new File(outputDirectory, file.replace(".less", ".css"));
+			File output = new File(item.getOutputDirectory(), file.replace(".less", ".css"));
 
 			if (!output.getParentFile().exists() && !output.getParentFile().mkdirs()) {
 				throw new MojoExecutionException("Cannot create output directory "
@@ -228,5 +241,71 @@ public class CompileMojo extends AbstractLessCssMojo {
 				throw new MojoExecutionException("Error while compiling LESS source: " + file, e);
 			}
 		}
+	}
+
+	
+	public List<ConfigurationItem> getConfiguration() {
+		if (this.configurationItems == null) {
+			configurationItems = new ArrayList<ConfigurationItem>();
+		}else{
+			//TODO: Should not need to do this but somehow an extra configuration 
+			//TODO: is included... 
+			return configurationItems; 
+		}
+		
+
+		ConfigurationItem configurationItem = new ConfigurationItem();
+		boolean configured = false;
+		if (sourceDirectory != null) {
+			configurationItem.setSourceDirectory(sourceDirectory);
+			configured = true;
+		}
+		if (outputDirectory != null) {
+			configurationItem.setOutputDirectory(outputDirectory);
+			configured = true;
+		}
+		if (excludes.length > 0) {
+			configurationItem.setExcludes(excludes);
+			configured = true;
+		}
+		if (includes[0] != INCLUDES_DEFAULT_VALUE) {
+			configurationItem.setIncludes(includes);
+			configured = true;
+		}
+		if (compress) {
+			configurationItem.setCompress(compress);
+			configured = true;
+		}
+		if (watch) {
+			configurationItem.setWatch(watch);
+			if (watchInterval != WATCH_INTERVAL_DEFAULT) {
+				configurationItem.setWatchInterval(watchInterval);
+			}else{
+				configurationItem.setWatchInterval(WATCH_INTERVAL_DEFAULT);
+			}
+			configured = true;
+		}
+		if (encoding != null) {
+			configurationItem.setEncoding(encoding);
+			configured = true;
+		}
+		if (force) {
+			configurationItem.setForce(force);
+			configured = true;
+		}
+		if (lessJs != null) {
+			configurationItem.setLessJs(lessJs);
+			configured = true;
+		}
+		if (concatenate) {
+			configurationItem.setConcatenate(concatenate);
+			configured = true;
+		}
+
+		if (configured) {
+			configurationItems.add(configurationItem);
+		}
+
+		return configurationItems;
 	}
 }

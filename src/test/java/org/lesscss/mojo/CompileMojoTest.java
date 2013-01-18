@@ -30,6 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -471,6 +472,20 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output, times(2)).getParentFile();
 		verify(parent).exists();
 		verify(parent).mkdirs();
+	}
+	
+	@Test
+	public void testGetFiles() throws Exception {
+		when(buildContext.newScanner(sourceDirectory, true)).thenReturn(scanner);
+		when(scanner.getIncludedFiles()).thenReturn(files);
+		
+		List<ConfigurationItem> items = mojo.getConfiguration();
+		assertSame(files, mojo.getIncludedFiles(items.get(0)));
+
+		verify(buildContext).newScanner(same(sourceDirectory), eq(true));
+		verify(scanner).setIncludes(same(includes));
+		verify(scanner).setExcludes(same(excludes));
+		verify(scanner).scan();
 	}
 
 	@After

@@ -34,7 +34,7 @@ public class CompileOnChangeMojoTest extends AbstractMojoTestCase {
 	*/
 	@Test
 	public void testIfFileChangeCausesRecompilation() throws Exception {
-		File pom = getTestFile("src/test/resources/pom.xml");
+		File pom = getTestFile("src/test/resources/change-pom.xml");
 		assertNotNull(pom);
 		assertTrue(pom.exists());
 		final CompileMojo compileMojo = (CompileMojo) lookupMojo("compile", pom);
