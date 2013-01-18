@@ -1,5 +1,6 @@
-Official LESS CSS Maven Plugin
-==============================
+LESS CSS Maven Plugin - SJV
+===========================
+For official versoin see: https://github.com/marceloverdijk/lesscss-maven-plugin 
 
 Usage
 -----
@@ -9,7 +10,7 @@ Declare the plugin and its goals. The process-sources phase is bound to by defau
     <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.3-SJV</version>
         <executions>
             <execution>
                 <goals>
@@ -28,7 +29,7 @@ Example configuration for web project
     <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.3-SJV</version>
         <configuration>
             <sourceDirectory>${project.basedir}/src/main/webapp/less</sourceDirectory>
             <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
@@ -36,6 +37,37 @@ Example configuration for web project
             <includes>
                 <include>main.less</include>
             </includes>
+        </configuration>
+        <executions>
+            <execution>
+                <goals>
+                    <goal>compile</goal>
+                </goals>
+            </execution>
+        </executions>
+    </plugin>
+    
+Exmple configuration with two configurations....
+------------------------------------------------
+    <plugin>
+        <groupId>org.lesscss</groupId>
+        <artifactId>lesscss-maven-plugin</artifactId>
+        <version>1.3.3-SJV</version>
+        <configuration>
+        	<configurationItems>
+        		<configurationItem>
+        			<!-- Common .js from framework -->
+        			<sourceDirectory>${project.basedir}/src/main/less/common</sourceDirectory>
+            		<outputDirectory>${project.build.directory}/${project.build.finalName}/css/common</outputDirectory>
+            		<compress>true</compress>
+        		</configurationItem>
+        			<!-- Project specific -->
+        			<sourceDirectory>${project.basedir}/src/main/webapp/less/project</sourceDirectory>
+            		<outputDirectory>${project.build.directory}/${project.build.finalName}/css/project</outputDirectory>
+            		<compress>false</compress>
+        		<configurationItem>
+        		</configurationItem>
+        	</configurationItems>
         </configuration>
         <executions>
             <execution>
@@ -59,29 +91,16 @@ All configuration options
 + includes (String[]) - List of files to include. Specified as fileset patterns which are relative to the source directory. Default value is: { "**\/*.less" }
 + lessJs (String) - The location of the LESS JavasSript file.
 + concatenate (boolean) - When true all less-files will be concatenated into a single file before compiling to css
-++ watch (boolean) - When true the plugin watches the sourceDirectory and recompiles the included files after they changed. Instead of configuring it in the pom you can use that option at the command line like this "mvn lesscss:compile -Dlesscss.watch=true". Then it doesn't interfere with other maven lifecycle phases and you can just kill the watch process e.g. with crtl-c. Default value is: false.
-++ watchInterval (int) - The interval in milliseconds the plugin waits between the check for file changes. Default value is: 1000 ms.
++ watch (boolean) - When true the plugin watches the sourceDirectory and recompiles the included files after they changed. Instead of configuring it in the pom you can use that option at the command line like this "mvn lesscss:compile -Dlesscss.watch=true". Then it doesn't interfere with other maven lifecycle phases and you can just kill the watch process e.g. with crtl-c. Default value is: false.
++ watchInterval (int) - The interval in milliseconds the plugin waits between the check for file changes. Default value is: 1000 ms.
++ configurationItems - a list of configurationItem.
++ configurationItem - a custom class. Holds a separate configuration, eg all of the above. 
 
 List sources
 ------------
 
 To list the LESS sources in your project the lesscss:list goal can be used. It lists the LESS sources and it's imports based on sourceDirectory and optionally includes and excludes configuration options.  
 
-
-Support
--------
-
-Have a question, or found an issue? Just create a issue: https://github.com/marceloverdijk/lesscss-maven-plugin/issues
-
-
-Authors
--------
-
-**Marcel Overdijk**
-
-+ marcel@overdijk.me
-+ http://twitter.com/marceloverdijk
-+ http://github.com/marceloverdijk
 
 
 Copyright and License
