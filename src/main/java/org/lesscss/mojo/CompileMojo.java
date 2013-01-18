@@ -141,8 +141,21 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 					String tmpPath = "less.less";
 					File tmpFile = new File(item.getSourceDirectory(), tmpPath);
+					
+					boolean updated = false;
+					for(String path: files){
+						File original = new File(item.getSourceDirectory(), path);
+						if(original.lastModified() > tmpFile.lastModified()){
+							updated = true;
+						}
+					}
+					
+					if(!updated){
+						getLog().info("No files updated since last build");
+						return;
+					}
+					
 					tmpFile.delete();
-					System.out.println(tmpFile.getAbsolutePath());
 					for (String path : files) {
 						File original = new File(item.getSourceDirectory(), path);
 						System.out.println(original.getAbsolutePath());

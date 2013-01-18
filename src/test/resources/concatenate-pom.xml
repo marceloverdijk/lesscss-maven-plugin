@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.lesscss.it</groupId>
+	<artifactId>basic</artifactId>
+	<version>testing</version>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.lesscss</groupId>
+				<artifactId>lesscss-maven-plugin</artifactId>
+				<version>@project.version@</version>
+				<configuration>
+					<concatenate>true</concatenate>
+					<sourceDirectory>src/test/resources/less</sourceDirectory>
+					<outputDirectory>${project.build.directory}/css1</outputDirectory>
+					<includes>
+						<include>**/*.less</include>
+					</includes>
+					<excludes>
+						<exclude>less.less</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
