@@ -90,12 +90,11 @@ public class CompileMojo extends AbstractLessCssMojo {
 	private boolean force;
 
 	/**
-	 * When <code>true</code> Concatenates the less-files into a single file
-	 * before compile to CSS.
+	 * If set concatenates the less files and outputs to the filename given
 	 * 
-	 * @parameter expression="${lesscss.concatenate}" default-value="false"
+	 * @parameter expression="${lesscss.concatenateTo}" 
 	 */
-	private boolean concatenate;
+	private String concatenateTo;
 
 	/**
 	 * The location of the LESS JavasSript file.
@@ -128,7 +127,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 				getLog().debug("excludes = " + Arrays.toString(item.getExcludes()));
 				getLog().debug("force = " + item.isForce());
 				getLog().debug("lessJs = " + item.getLessJs());
-				getLog().debug("concatenate = " + item.isConcatenate());
+				getLog().debug("concatenate = " + item.getConcateanteTo());
 				getLog().debug("watch = " + item.isWatch());
 				getLog().debug("watchInterval = " + item.getWatchInterval());
 				getLog().debug("compress = " + item.isCompress());
@@ -136,33 +135,21 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 			String[] files = getIncludedFiles(item);
 
-			if (item.isConcatenate()) {
+			if (item.getConcateanteTo() != null) {
 				try {
 
-					String tmpPath = "less.less";
+					String tmpPath = item.getConcateanteTo();
 					File tmpFile = new File(item.getSourceDirectory(), tmpPath);
 					
-					boolean updated = false;
-					for(String path: files){
-						File original = new File(item.getSourceDirectory(), path);
-						if(original.lastModified() > tmpFile.lastModified()){
-							updated = true;
-						}
-					}
-					
+					boolean updated = isFilesUpdated(item, files, tmpFile);
 					if(!updated){
 						getLog().info("No files updated since last build");
 						return;
 					}
 					
-					tmpFile.delete();
-					for (String path : files) {
-						File original = new File(item.getSourceDirectory(), path);
-						System.out.println(original.getAbsolutePath());
-						String content = FileUtils.readFileToString(original);
-						FileUtils.write(tmpFile, content, true);
-					}
-					files = new String[] { tmpPath };
+					deleteTemporaryFile(tmpFile);
+					buildConcatenatedFile(item, files, tmpFile);
+					files = setTemporaryAsFileToCompile(tmpPath);
 				} catch (IOException ioe) {
 					getLog().error("Error concatenating files", ioe);
 				}
@@ -211,6 +198,37 @@ public class CompileMojo extends AbstractLessCssMojo {
 								+ (System.currentTimeMillis() - start) + " ms");
 			}
 		}
+	}
+
+	private String[] setTemporaryAsFileToCompile(String tmpPath) {
+		String[] files;
+		files = new String[] { tmpPath };
+		return files;
+	}
+
+	private void buildConcatenatedFile(ConfigurationItem item, String[] files, File tmpFile)
+			throws IOException {
+		for (String path : files) {
+			File original = new File(item.getSourceDirectory(), path);
+			System.out.println(original.getAbsolutePath());
+			String content = FileUtils.readFileToString(original);
+			FileUtils.write(tmpFile, content, true);
+		}
+	}
+
+	private void deleteTemporaryFile(File tmpFile) {
+		tmpFile.delete();
+	}
+
+	private boolean isFilesUpdated(ConfigurationItem item, String[] files, File tmpFile) {
+		boolean updated = false;
+		for(String path: files){
+			File original = new File(item.getSourceDirectory(), path);
+			if(original.lastModified() > tmpFile.lastModified()){
+				updated = true;
+			}
+		}
+		return updated;
 	}
 
 	private void compileIfChanged(String[] files, LessCompiler lessCompiler,
@@ -310,8 +328,8 @@ public class CompileMojo extends AbstractLessCssMojo {
 			configurationItem.setLessJs(lessJs);
 			configured = true;
 		}
-		if (concatenate) {
-			configurationItem.setConcatenate(concatenate);
+		if (concatenateTo != null) {
+			configurationItem.setConcatenateTo(concatenateTo);
 			configured = true;
 		}
 

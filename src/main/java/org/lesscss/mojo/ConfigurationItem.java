@@ -21,7 +21,7 @@ public class ConfigurationItem {
 	private String encoding;
 	private boolean force;
 	private File lessJs;
-	private boolean concatenate;
+	private String concatenateTo;
 	
 	public File getSourceDirectory() {
 		return sourceDirectory;
@@ -103,10 +103,10 @@ public class ConfigurationItem {
 		this.lessJs = lessJs;
 	}
 
-	public boolean isConcatenate() {
-		return concatenate;
+	public String getConcateanteTo() {
+		return concatenateTo;
 	}
-	public void setConcatenate(final boolean concatenate){
-		this.concatenate = concatenate;
+	public void setConcatenateTo(final String concatenate){
+		this.concatenateTo = concatenate;
 	}
 }

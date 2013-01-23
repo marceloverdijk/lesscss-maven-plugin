@@ -21,7 +21,7 @@ public class MultipleConfigurationTest extends AbstractMojoTestCase {
 	private String encoding = "UTF-8";
 	private boolean force = true;
 	private File lessJs = new File("./lessJs");
-	private boolean concatenate = true;
+	private String concatenateTo = "test.css";
 
 	private String[] files = new String[] { "file" };
 
@@ -46,7 +46,7 @@ public class MultipleConfigurationTest extends AbstractMojoTestCase {
 		setVariableValueToObject(mojo, "watchInterval", watchInterval);
 		setVariableValueToObject(mojo, "force", force);
 		setVariableValueToObject(mojo, "lessJs", lessJs);
-		setVariableValueToObject(mojo, "concatenate", concatenate);
+		setVariableValueToObject(mojo, "concatenateTo", concatenateTo);
 
 		List<ConfigurationItem> configurationItems = mojo.getConfiguration();
 		assertEquals(1, configurationItems.size());
@@ -63,7 +63,7 @@ public class MultipleConfigurationTest extends AbstractMojoTestCase {
 		assertEquals(watchInterval, item.getWatchInterval());
 		assertEquals(force, item.isForce());
 		assertEquals(lessJs, item.getLessJs());
-		assertEquals(concatenate, item.isConcatenate());
+		assertEquals(concatenateTo, item.getConcateanteTo());
 	}
 
 	@Test

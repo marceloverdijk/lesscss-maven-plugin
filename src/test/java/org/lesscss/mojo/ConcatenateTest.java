@@ -12,22 +12,27 @@ public class ConcatenateTest extends AbstractMojoTestCase {
 		File pom = getTestFile("src/test/resources/concatenate-pom.xml");
 		final CompileMojo compileMojo = (CompileMojo) lookupMojo("compile", pom);
 		
-		File expected = new File(compileMojo.sourceDirectory, "less.less");
+		File expected = new File(compileMojo.sourceDirectory, "concatenated.less");
 		if(expected.exists()){
 			expected.delete();
 		}
 		
 		compileMojo.execute();
-		expected = new File(compileMojo.sourceDirectory, "less.less");
+		expected = new File(compileMojo.sourceDirectory, "concatenated.less");
 		
 		compileMojo.execute();
-		File actual = new File(compileMojo.sourceDirectory, "less.less");
+		File actual = new File(compileMojo.sourceDirectory, "concatenated.less");
 		
 		assertEquals(expected.lastModified(), actual.lastModified());
+	}
+	
+	@Test
+	public void testProducesCssFile() throws Exception{
+		File pom = getTestFile("src/test/resources/concatenate-pom.xml");
+		final CompileMojo compileMojo = (CompileMojo) lookupMojo("compile", pom);
+		compileMojo.execute();
 		
-		
-		
-		
-		
+		File expected = new File(compileMojo.outputDirectory, "concatenated.css");
+		assertTrue(expected.exists());
 	}
 }

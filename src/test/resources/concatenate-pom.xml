@@ -13,7 +13,7 @@
 				<artifactId>lesscss-maven-plugin</artifactId>
 				<version>@project.version@</version>
 				<configuration>
-					<concatenate>true</concatenate>
+					<concatenateTo>concatenated.less</concatenateTo>
 					<sourceDirectory>src/test/resources/less</sourceDirectory>
 					<outputDirectory>${project.build.directory}/css1</outputDirectory>
 					<includes>
