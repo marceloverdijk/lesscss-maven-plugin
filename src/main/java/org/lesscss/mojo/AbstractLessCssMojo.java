@@ -15,6 +15,7 @@
 package org.lesscss.mojo;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.codehaus.plexus.util.Scanner;
@@ -31,6 +32,13 @@ public abstract class AbstractLessCssMojo extends AbstractMojo {
 	protected BuildContext buildContext;
 
 	/**
+	 * Using configurationItems allows you to have several different compilations on a single project
+	 * 
+	 * @parameter
+	 */
+	protected List<ConfigurationItem> configurationItems;
+
+	/**
 	 * The source directory containing the LESS sources.
 	 * 
 	 * @parameter expression="${lesscss.sourceDirectory}" default-value="${project.basedir}/src/main/less"
@@ -43,7 +51,7 @@ public abstract class AbstractLessCssMojo extends AbstractMojo {
 	 * 
 	 * @parameter
 	 */
-	protected String[] includes = new String[] { "**/*.less" };
+	protected String[] includes = new String[] { INCLUDES_DEFAULT_VALUE };
 
 	/**
 	 * List of files to exclude. Specified as fileset patterns which are relative to the source directory.
@@ -52,16 +60,25 @@ public abstract class AbstractLessCssMojo extends AbstractMojo {
 	 */
 	protected String[] excludes = new String[] {};
 
+	static final String INCLUDES_DEFAULT_VALUE = "**/*.less";
+
 	/**
 	 * Scans for the LESS sources that should be compiled.
 	 * 
 	 * @return The list of LESS sources.
 	 */
-	protected String[] getIncludedFiles() {
-		Scanner scanner = buildContext.newScanner(sourceDirectory, true);
-		scanner.setIncludes(includes);
-		scanner.setExcludes(excludes);
+	protected String[] getIncludedFiles(ConfigurationItem configurationItem) {
+		Scanner scanner = buildContext.newScanner(configurationItem.getSourceDirectory(), true);
+		scanner.setIncludes(configurationItem.getIncludes());
+		scanner.setExcludes(configurationItem.getExcludes());
 		scanner.scan();
 		return scanner.getIncludedFiles();
 	}
+
+	/**
+	 * Get configuration
+	 * 
+	 * @return a list of ConfigurationItems read from the plugin-configuration
+	 */
+	protected abstract List<ConfigurationItem> getConfiguration();
 }

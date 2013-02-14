@@ -17,8 +17,10 @@ package org.lesscss.mojo;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -44,8 +46,15 @@ public class ListMojo extends AbstractLessCssMojo {
 			getLog().debug("includes = " + Arrays.toString(includes));
 			getLog().debug("excludes = " + Arrays.toString(excludes));
 		}
+		
+		List<ConfigurationItem> configurationItems = getConfiguration();
 
-		String[] files = getIncludedFiles();
+		if (configurationItems.size() == 0) {
+			return;
+		}
+		ConfigurationItem item = configurationItems.get(0);
+
+		String[] files = getIncludedFiles(item);
 
 		if (files == null || files.length < 1) {
 			getLog().info("No LESS sources found");
@@ -58,9 +67,11 @@ public class ListMojo extends AbstractLessCssMojo {
 					LessSource lessSource = new LessSource(lessFile);
 					listLessSource(lessSource, file, 0, false);
 				} catch (FileNotFoundException e) {
-					throw new MojoExecutionException("Error while loading LESS source: " + lessFile.getAbsolutePath(), e);
+					throw new MojoExecutionException("Error while loading LESS source: "
+							+ lessFile.getAbsolutePath(), e);
 				} catch (IOException e) {
-					throw new MojoExecutionException("Error while loading LESS source: " + lessFile.getAbsolutePath(), e);
+					throw new MojoExecutionException("Error while loading LESS source: "
+							+ lessFile.getAbsolutePath(), e);
 				}
 			}
 		}
@@ -87,5 +98,33 @@ public class ListMojo extends AbstractLessCssMojo {
 			Entry<String, LessSource> entry = it.next();
 			listLessSource(entry.getValue(), entry.getKey(), level + 1, !it.hasNext());
 		}
+	}
+	
+	public List<ConfigurationItem> getConfiguration() {
+		if(this.configurationItems == null){
+			configurationItems = new ArrayList<ConfigurationItem>();
+		}
+		
+		ConfigurationItem configurationItem = new ConfigurationItem();
+		boolean configured = false;
+		if (sourceDirectory != null) {
+			configurationItem.setSourceDirectory(sourceDirectory);
+			configured = true;
+		}
+		
+		if(excludes.length > 0){
+			configurationItem.setExcludes(excludes);
+			configured = true;
+		}
+		if(includes[0] != INCLUDES_DEFAULT_VALUE){
+			configurationItem.setIncludes(includes);
+			configured = true;
+		}
+		
+		if (configured) {
+			configurationItems.add(configurationItem);
+		}
+		
+		return configurationItems;
 	}
 }

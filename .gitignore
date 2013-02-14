@@ -1,5 +1,7 @@
+/src/it/concatenate/src/main/less/less.less
 
 .classpath
 .project
 .settings/
 target/
+.svn
