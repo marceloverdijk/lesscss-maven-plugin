@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.lesscss</groupId>
     <artifactId>lesscss-maven-plugin</artifactId>
-    <version>1.3.1-SNAPSHOT</version>
+    <version>1.3.3-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <name>Official LESS CSS Maven Plugin</name>
     <description>Official LESS CSS Maven Plugin</description>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>org.lesscss</groupId>
             <artifactId>lesscss</artifactId>
-            <version>1.3.0</version>
+            <version>1.3.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -132,6 +132,16 @@
                 <role>Lead Developer</role>
             </roles>
             <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>cpopov</id>
+            <name>Christophe Popov</name>
+            <email>chrpopov.gmail.com</email>
+            <url>http://uk.linkedin.com/in/hpopov/</url>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>0</timezone>
         </developer>
     </developers>
     
