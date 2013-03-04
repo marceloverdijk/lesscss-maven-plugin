@@ -1,12 +1,6 @@
 Official LESS CSS Maven Plugin
 ==============================
 
-----------
-
-> Important note: 
-> Due to changed interesst I'm no longer maintaining this project. Based on the frequent questions I get by e-mail and requests for updates (including pull requests) I think this project would serve it's goal to be continued. Therefore if you are interested to take over and bring this project to the next level contact me.
-
-----------
 
 Usage
 -----
@@ -16,7 +10,7 @@ Declare the plugin and its goals. The process-sources phase is bound to by defau
     <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.3</version>
         <executions>
             <execution>
                 <goals>
@@ -35,7 +29,7 @@ Example configuration for web project
     <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.3</version>
         <configuration>
             <sourceDirectory>${project.basedir}/src/main/webapp/less</sourceDirectory>
             <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
@@ -87,6 +81,11 @@ Authors
 + marcel@overdijk.me
 + http://twitter.com/marceloverdijk
 + http://github.com/marceloverdijk
+
+**Christophe Popov**
+
++ http://twitter.com/chpopov
++ http://uk.linkedin.com/in/hpopov/
 
 
 Copyright and License
