@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 
+import org.apache.commons.io.Charsets;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.StringUtils;
 import org.lesscss.LessCompiler;
@@ -53,9 +54,16 @@ public class CompileMojo extends AbstractLessCssMojo {
 	/**
 	 * The character encoding the LESS compiler will use for writing the CSS stylesheets.
 	 * 
-	 * @parameter expression="${lesscss.encoding}" default-value="${project.build.sourceEncoding}"
+	 * @parameter expression="${lesscss.outputEncoding}" default-value="${project.build.sourceEncoding}"
 	 */
-	private String encoding;
+	private String outputEncoding;
+
+    /**
+     * The character encoding the LESS compiler will use for writing the CSS stylesheets.
+     *
+     * @parameter expression="${lesscss.inputEncoding}" default-value="${project.build.sourceEncoding}"
+     */
+    private String inputEncoding;
 
 	/**
 	 * When <code>true</code> forces the LESS compiler to always compile the LESS sources. By default LESS sources are only compiled when modified (including imports) or the CSS stylesheet does not exists.
@@ -101,7 +109,8 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 			LessCompiler lessCompiler = new LessCompiler();
 			lessCompiler.setCompress(compress);
-			lessCompiler.setEncoding(encoding);
+            lessCompiler.setInputEncoding(inputEncoding);
+			lessCompiler.setOutputEncoding(outputEncoding);
 
 			if (lessJs != null) {
 				try {
@@ -124,7 +133,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 				}
 
 				try {
-					LessSource lessSource = new LessSource(input);
+					LessSource lessSource = new LessSource(input, Charsets.toCharset(inputEncoding));
 
 					if (output.lastModified() < lessSource.getLastModifiedIncludingImports()) {
 						getLog().info("Compiling LESS source: " + file + "...");
