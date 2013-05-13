@@ -31,6 +31,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.apache.commons.io.Charsets;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
@@ -124,7 +125,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null)).thenReturn(lessSource);
 
 		when(output.lastModified()).thenReturn(1l);
 		when(lessSource.getLastModifiedIncludingImports()).thenReturn(2l);
@@ -138,7 +139,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 
 		verifyNew(LessCompiler.class).withNoArguments();
 		verify(lessCompiler).setCompress(false);
-		verify(lessCompiler).setEncoding(null);
+		verify(lessCompiler).setOutputEncoding(null);
 
 		verifyNew(File.class).withArguments(sourceDirectory, "less.less");
 		verifyNew(File.class).withArguments(outputDirectory, "less.css");
@@ -146,7 +147,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output).getParentFile();
 		verify(parent).exists();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null));
 
 		verify(output).lastModified();
 		verify(lessSource).getLastModifiedIncludingImports();
@@ -170,7 +171,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null)).thenReturn(lessSource);
 
 		when(output.lastModified()).thenReturn(2l);
 		when(lessSource.getLastModifiedIncludingImports()).thenReturn(1l);
@@ -184,7 +185,8 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 
 		verifyNew(LessCompiler.class).withNoArguments();
 		verify(lessCompiler).setCompress(false);
-		verify(lessCompiler).setEncoding(null);
+		verify(lessCompiler).setOutputEncoding(null);
+        verify(lessCompiler).setInputEncoding(null);
 
 		verifyNew(File.class).withArguments(sourceDirectory, "less.less");
 		verifyNew(File.class).withArguments(outputDirectory, "less.css");
@@ -192,9 +194,9 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output).getParentFile();
 		verify(parent).exists();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null));
 		verify(lessCompiler).setCompress(false);
-		verify(lessCompiler).setEncoding(null);
+		verify(lessCompiler).setOutputEncoding(null);
 
 		verify(output).lastModified();
 		verify(lessSource).getLastModifiedIncludingImports();
@@ -242,7 +244,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenThrow(new IOException());
+		whenNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null)).thenThrow(new IOException());
 
 		mojo.execute();
 
@@ -253,7 +255,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 
 		verifyNew(LessCompiler.class).withNoArguments();
 		verify(lessCompiler).setCompress(false);
-		verify(lessCompiler).setEncoding(null);
+		verify(lessCompiler).setOutputEncoding(null);
 
 		verifyNew(File.class).withArguments(sourceDirectory, "less.less");
 		verifyNew(File.class).withArguments(outputDirectory, "less.css");
@@ -261,7 +263,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output).getParentFile();
 		verify(parent).exists();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null));
 	}
 
 	@Test(expected = MojoExecutionException.class)
@@ -279,7 +281,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null)).thenReturn(lessSource);
 
 		when(output.lastModified()).thenReturn(1l);
 		when(lessSource.getLastModifiedIncludingImports()).thenReturn(2l);
@@ -295,7 +297,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 
 		verifyNew(LessCompiler.class).withNoArguments();
 		verify(lessCompiler).setCompress(false);
-		verify(lessCompiler).setEncoding(null);
+		verify(lessCompiler).setOutputEncoding(null);
 
 		verifyNew(File.class).withArguments(sourceDirectory, "less.less");
 		verifyNew(File.class).withArguments(outputDirectory, "less.css");
@@ -303,7 +305,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output).getParentFile();
 		verify(parent).exists();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null));
 
 		verify(output).lastModified();
 		verify(lessSource).getLastModifiedIncludingImports();
@@ -332,7 +334,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null)).thenReturn(lessSource);
 
 		when(output.lastModified()).thenReturn(1l);
 		when(lessSource.getLastModifiedIncludingImports()).thenReturn(2l);
@@ -346,7 +348,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 
 		verifyNew(LessCompiler.class).withNoArguments();
 		verify(lessCompiler).setCompress(false);
-		verify(lessCompiler).setEncoding(null);
+		verify(lessCompiler).setOutputEncoding(null);
 		verify(lessCompiler).setLessJs(lessJsURL);
 
 		verifyNew(File.class).withArguments(sourceDirectory, "less.less");
@@ -355,7 +357,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output).getParentFile();
 		verify(parent).exists();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null));
 
 		verify(output).lastModified();
 		verify(lessSource).getLastModifiedIncludingImports();
@@ -387,7 +389,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 
 		verifyNew(LessCompiler.class).withNoArguments();
 		verify(lessCompiler).setCompress(false);
-		verify(lessCompiler).setEncoding(null);
+		verify(lessCompiler).setOutputEncoding(null);
 	}
 
 	@Test
@@ -406,7 +408,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(parent.exists()).thenReturn(false);
 		when(parent.mkdirs()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null)).thenReturn(lessSource);
 
 		when(output.lastModified()).thenReturn(1l);
 		when(lessSource.getLastModifiedIncludingImports()).thenReturn(2l);
@@ -420,7 +422,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 
 		verifyNew(LessCompiler.class).withNoArguments();
 		verify(lessCompiler).setCompress(false);
-		verify(lessCompiler).setEncoding(null);
+		verify(lessCompiler).setOutputEncoding(null);
 
 		verifyNew(File.class).withArguments(sourceDirectory, "less.less");
 		verifyNew(File.class).withArguments(outputDirectory, "less.css");
@@ -429,7 +431,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(parent).exists();
 		verify(parent).mkdirs();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, Charsets.toCharset((String)null));
 
 		verify(output).lastModified();
 		verify(lessSource).getLastModifiedIncludingImports();
@@ -463,7 +465,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 
 		verifyNew(LessCompiler.class).withNoArguments();
 		verify(lessCompiler).setCompress(false);
-		verify(lessCompiler).setEncoding(null);
+		verify(lessCompiler).setOutputEncoding(null);
 
 		verifyNew(File.class).withArguments(sourceDirectory, "less.less");
 		verifyNew(File.class).withArguments(outputDirectory, "less.css");
