@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.lesscss.it</groupId>
+    <artifactId>nodejs</artifactId>
+    <version>testing</version>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.skwakman.nodejs-maven-plugin</groupId>
+                <artifactId>nodejs-maven-plugin</artifactId>
+                <version>1.0.3</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>extract</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <targetDirectory>${project.build.directory}/nodejs</targetDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.lesscss</groupId>
+                <artifactId>lesscss-maven-plugin</artifactId>
+                <version>@project.version@</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <nodeExecutable>${project.build.directory}/nodejs/node</nodeExecutable>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>
