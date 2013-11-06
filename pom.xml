@@ -122,7 +122,7 @@
                     <username>${SCMuser}</username>
                     <password>${SCMpassword}</password>
                     <preparationGoals>clean</preparationGoals>
-                    <arguments>-s rc-settings.xml -Dsite_version=release -DuseReleaseProfile=false</arguments>
+                    <arguments>-s rc-settings.xml</arguments>
                     <goals>clean deploy</goals>
                 </configuration>
             </plugin>
