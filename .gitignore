@@ -3,3 +3,6 @@
 .project
 .settings/
 target/
+rc-settings.xml
+release.properties
+pom.xml.releaseBackup
