@@ -92,6 +92,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 			getLog().debug("excludes = " + Arrays.toString(excludes));
 			getLog().debug("force = " + force);
 			getLog().debug("lessJs = " + lessJs);
+			getLog().debug("nodeExecutable = " + nodeExecutable);
 			getLog().debug("skip = " + skip);
 		}
 
@@ -171,7 +172,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 		if (nodeExecutable != null) {
 			NodeJsLessCompiler lessCompiler;
 			try {
-				lessCompiler = new NodeJsLessCompiler(compress, encoding, getLog());
+				lessCompiler = new NodeJsLessCompiler(compress, encoding, getLog(), nodeExecutable);
 			} catch (IOException e) {
 				throw new MojoExecutionException(e.getMessage(), e);
 			}
