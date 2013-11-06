@@ -1,5 +1,5 @@
-Official LESS CSS Maven Plugin
-==============================
+(CG Care) Official LESS CSS Maven Plugin
+========================================
 
 
 Usage
@@ -8,7 +8,7 @@ Usage
 Declare the plugin and its goals. The process-sources phase is bound to by default:
 
     <plugin>
-        <groupId>org.lesscss</groupId>
+        <groupId>com.intuit.cg.care</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
         <version>1.4.0</version>
         <executions>
@@ -27,7 +27,7 @@ Example configuration for web project
 -------------------------------------
 
     <plugin>
-        <groupId>org.lesscss</groupId>
+        <groupId>com.intuit.cg.care</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
         <version>1.4.0</version>
         <configuration>
