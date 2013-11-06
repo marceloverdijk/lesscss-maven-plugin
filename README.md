@@ -10,7 +10,7 @@ Declare the plugin and its goals. The process-sources phase is bound to by defau
     <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.3.3</version>
+        <version>1.4.0</version>
         <executions>
             <execution>
                 <goals>
@@ -29,7 +29,7 @@ Example configuration for web project
     <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.3.3</version>
+        <version>1.4.0</version>
         <configuration>
             <sourceDirectory>${project.basedir}/src/main/webapp/less</sourceDirectory>
             <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
@@ -37,6 +37,9 @@ Example configuration for web project
             <includes>
                 <include>main.less</include>
             </includes>
+            <nodeExecutable>
+                node
+            </nodeExecutable>
         </configuration>
         <executions>
             <execution>
@@ -59,6 +62,7 @@ All configuration options
 + force (boolean) - When true forces the LESS compiler to always compile the LESS sources. By default LESS sources are only compiled when modified (including imports) or the CSS stylesheet does not exists. Default value is: false.
 + includes (String[]) - List of files to include. Specified as fileset patterns which are relative to the source directory. Default value is: { "**\/*.less" }
 + lessJs (String) - The location of the LESS JavasSript file.
++ nodeExecutable (String) - The location of the nodeJS executable. Compatible with nodejs-maven-plugin (the phase for that plugin must be set to generate-sources). Use "node" if node is installed natively on the system you are building on. Will default to Rhino if not set.
 + skip (boolean) - Whether to skip plugin execution. Default value is: false.
 
 
