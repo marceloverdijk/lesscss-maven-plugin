@@ -10,7 +10,7 @@ Declare the plugin and its goals. The process-sources phase is bound to by defau
     <plugin>
         <groupId>com.intuit.cg.care</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.4.0</version>
+        <version>1.4.2</version>
         <executions>
             <execution>
                 <goals>
@@ -29,7 +29,7 @@ Example configuration for web project
     <plugin>
         <groupId>com.intuit.cg.care</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.4.0</version>
+        <version>1.4.2</version>
         <configuration>
             <sourceDirectory>${project.basedir}/src/main/webapp/less</sourceDirectory>
             <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
