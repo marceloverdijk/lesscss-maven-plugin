@@ -72,11 +72,18 @@ public class NodeJsLessCompiler {
 	private final boolean compress;
 	private final String encoding;
 	private final File tempDir;
+	private final String nodeExecutablePath;
 
 	public NodeJsLessCompiler(boolean compress, String encoding, Log log) throws IOException {
+		this("node", compress, encoding, log);
+	}
+
+	public NodeJsLessCompiler(String nodeExecutablePath, boolean compress, 
+			String encoding, Log log) throws IOException {
 		this.compress = compress;
 		this.encoding = encoding;
 		this.log = log;
+		this.nodeExecutablePath = nodeExecutablePath;
 
 		tempDir = createTempDir("lessc");
 		new File(tempDir, "less/tree").mkdirs();
@@ -128,7 +135,7 @@ public class NodeJsLessCompiler {
 		File outputFile = File.createTempFile("lessc-output-", ".css");
 		File lesscJsFile = new File(tempDir, "lessc.js");
 
-		ProcessBuilder pb = new ProcessBuilder("node", lesscJsFile.getAbsolutePath(),
+		ProcessBuilder pb = new ProcessBuilder(nodeExecutablePath, lesscJsFile.getAbsolutePath(),
 				inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), String.valueOf(compress));
 		pb.redirectErrorStream(true);
 		Process process = pb.start();
