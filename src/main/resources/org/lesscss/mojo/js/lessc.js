@@ -6,7 +6,7 @@ var outputFile = process.argv[3];
 var compress = (process.argv[4] !== 'false');
 
 var inputText = fs.readFileSync(inputFile, 'utf8');
-var parser = new less.Parser();
+var parser = new less.Parser({});
 parser.parse(inputText, function(e, tree) {
   if (e instanceof Object) {
 	throw e;

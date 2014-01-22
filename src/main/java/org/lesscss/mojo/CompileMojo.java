@@ -85,9 +85,6 @@ public class CompileMojo extends AbstractLessCssMojo {
 	 *             if something unexpected occurs.
 	 */
 	public void execute() throws MojoExecutionException {
-
-		long start = System.currentTimeMillis();
-
 		if (getLog().isDebugEnabled()) {
 			getLog().debug("sourceDirectory = " + sourceDirectory);
 			getLog().debug("outputDirectory = " + outputDirectory);
@@ -95,8 +92,20 @@ public class CompileMojo extends AbstractLessCssMojo {
 			getLog().debug("excludes = " + Arrays.toString(excludes));
 			getLog().debug("force = " + force);
 			getLog().debug("lessJs = " + lessJs);
+			getLog().debug("nodeExecutable = " + nodeExecutable);
+			getLog().debug("skip = " + skip);
 		}
 
+		if(!skip){
+			executeInternal();
+		} else {
+			getLog().info("Skipping plugin execution per configuration");
+		}
+	}
+
+	private void executeInternal() throws MojoExecutionException {
+		long start = System.currentTimeMillis();
+		
 		String[] files = getIncludedFiles();
 
 		if (files == null || files.length < 1) {
@@ -163,7 +172,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 		if (nodeExecutable != null) {
 			NodeJsLessCompiler lessCompiler;
 			try {
-				lessCompiler = new NodeJsLessCompiler(compress, encoding, getLog());
+				lessCompiler = new NodeJsLessCompiler(compress, encoding, getLog(), nodeExecutable);
 			} catch (IOException e) {
 				throw new MojoExecutionException(e.getMessage(), e);
 			}

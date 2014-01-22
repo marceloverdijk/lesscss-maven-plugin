@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.lesscss</groupId>
+    <groupId>com.intuit.cg.care</groupId>
     <artifactId>lesscss-maven-plugin</artifactId>
-    <version>1.3.3.1-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
-    <name>Official LESS CSS Maven Plugin</name>
-    <description>Official LESS CSS Maven Plugin</description>
-    <url>http://github.com/marceloverdijk/lesscss-maven-plugin</url>
+    <name>(CG Care) Official LESS CSS Maven Plugin</name>
+    <description>(CG Care) Official LESS CSS Maven Plugin</description>
+    <url>http://github.com/stolidity/lesscss-maven-plugin</url>
     
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -18,6 +18,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <releasedeployrepo>http://sdgctgdevrepo.corp.intuit.net/nexus/content/repositories/ENG.CTG.Intuit-Releases</releasedeployrepo>
+        <snapshotdeployrepo>http://sdgctgdevrepo.corp.intuit.net/nexus/content/repositories/ENG.CTG.Intuit-Snapshots</snapshotdeployrepo>
+        <cg_central_repo>http://ctg-cache-repo.corp.intuit.net/nexus/content/groups/public</cg_central_repo>
     </properties>
     
     <dependencies>
@@ -112,6 +115,17 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <username>${SCMuser}</username>
+                    <password>${SCMpassword}</password>
+                    <preparationGoals>clean</preparationGoals>
+                    <arguments>-s rc-settings.xml</arguments>
+                    <goals>clean deploy</goals>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     
@@ -125,39 +139,47 @@
     
     <developers>
         <developer>
-            <id>marceloverdijk</id>
-            <name>Marcel Overdijk</name>
-            <email>marcel@overdijk.me</email>
+            <id>stolidity</id>
+            <name>Brian Wilhite</name>
+            <email>stolidity@gmail.com</email>
             <roles>
                 <role>Lead Developer</role>
             </roles>
-            <timezone>+2</timezone>
-        </developer>
-        <developer>
-            <id>cpopov</id>
-            <name>Christophe Popov</name>
-            <email>chrpopov.gmail.com</email>
-            <url>http://uk.linkedin.com/in/hpopov/</url>
-            <roles>
-                <role>Developer</role>
-            </roles>
-            <timezone>0</timezone>
+            <timezone>-8</timezone>
         </developer>
     </developers>
     
     <issueManagement>
         <system>GitHub</system>
-        <url>http://github.com/marceloverdijk/lesscss-maven-plugin/issues</url>
+        <url>http://github.com/stolidity/lesscss-maven-plugin/issues</url>
     </issueManagement>
     
     <scm>
-        <connection>scm:git:git@github.com:marceloverdijk/lesscss-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:marceloverdijk/lesscss-maven-plugin.git</developerConnection>
-        <url>http://github.com/marceloverdijk/lesscss-maven-plugin</url>
+        <connection>scm:git:git@github.com:stolidity/lesscss-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:stolidity/lesscss-maven-plugin.git</developerConnection>
+        <url>http://github.com/stolidity/lesscss-maven-plugin</url>
     </scm>
     
     <prerequisites>
         <maven>2.0</maven>
     </prerequisites>
     
+    <distributionManagement>
+        <repository>
+            <id>cg-repo</id>
+            <name>cg-repo-release</name>
+            <url>${releasedeployrepo}</url>
+        </repository>
+        <snapshotRepository>
+            <id>cg-repo</id>
+            <name>cg-repo-snapshot</name>
+            <url>${snapshotdeployrepo}</url>
+            <uniqueVersion>true</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id>cg-maven-docs</id>
+            <name>CG Maven Project Documentation</name>
+            <url>dav:${project.url}</url>
+        </site>
+    </distributionManagement>
 </project>
