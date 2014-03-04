@@ -86,6 +86,13 @@ public class CompileMojo extends AbstractLessCssMojo {
 	private File lessJs;
 
 	/**
+	 * The location of the NodeJS executable.
+	 *
+	 * @parameter
+	 */
+	private String nodeExecutable;
+
+	/**
 	 * Execute the MOJO.
 	 * 
 	 * @throws MojoExecutionException
@@ -112,10 +119,76 @@ public class CompileMojo extends AbstractLessCssMojo {
 				getLog().debug("included files = " + Arrays.toString(files));
 			}
 
+			Object lessCompiler = initLessCompiler();
+			try {
+				for (String file : files) {
+					File input = new File(sourceDirectory, file);
+	
+					buildContext.removeMessages(input);
+	
+					File output = new File(outputDirectory, file.replace(".less", ".css"));
+	
+					if (!output.getParentFile().exists() && !output.getParentFile().mkdirs()) {
+						throw new MojoExecutionException("Cannot create output directory " + output.getParentFile());
+					}
+	
+					try {
+						LessSource lessSource = new LessSource(input);
+	
+						if (output.lastModified() < lessSource.getLastModifiedIncludingImports() || force) {
+							getLog().info("Compiling LESS source: " + file + "...");
+							if (lessCompiler instanceof LessCompiler) {
+								((LessCompiler) lessCompiler).compile(lessSource, output, force);
+							} else {
+								((NodeJsLessCompiler) lessCompiler).compile(lessSource, output, force);
+							}
+							buildContext.refresh(output);
+						}
+						else {
+							getLog().info("Bypassing LESS source: " + file + " (not modified)");
+						}
+					} catch (IOException e) {
+						buildContext.addMessage(input, 0, 0, "Error compiling LESS source", BuildContext.SEVERITY_ERROR, e);
+						throw new MojoExecutionException("Error while compiling LESS source: " + file, e);
+					} catch (LessException e) {
+						String message = e.getMessage();
+						if (StringUtils.isEmpty(message)) {
+							message = "Error compiling LESS source";
+						}
+						buildContext.addMessage(input, 0, 0, "Error compiling LESS source", BuildContext.SEVERITY_ERROR, e);
+						throw new MojoExecutionException("Error while compiling LESS source: " + file, e);
+					} catch (InterruptedException e) {
+						buildContext.addMessage(input, 0, 0, "Error compiling LESS source", BuildContext.SEVERITY_ERROR, e);
+						throw new MojoExecutionException("Error while compiling LESS source: " + file, e);
+					}
+				}
+			} finally {
+				if (lessCompiler instanceof NodeJsLessCompiler) {
+					((NodeJsLessCompiler) lessCompiler).close();
+				}
+			}
+
+			getLog().info("Compilation finished in " + (System.currentTimeMillis() - start) + " ms");
+		}
+	}
+
+	private Object initLessCompiler() throws MojoExecutionException {
+		if (nodeExecutable != null) {
+			NodeJsLessCompiler lessCompiler;
+			try {
+				lessCompiler = new NodeJsLessCompiler(compress, encoding, getLog());
+			} catch (IOException e) {
+				throw new MojoExecutionException(e.getMessage(), e);
+			}
+			if (lessJs != null) {
+				throw new MojoExecutionException(
+						"Custom LESS JavaScript is not currently supported when using nodeExecutable");
+			}
+			return lessCompiler;
+		} else {
 			LessCompiler lessCompiler = new LessCompiler();
 			lessCompiler.setCompress(compress);
 			lessCompiler.setEncoding(encoding);
-
 			if (lessJs != null) {
 				try {
 					lessCompiler.setLessJs(lessJs.toURI().toURL());
@@ -124,65 +197,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 							"Error while loading LESS JavaScript: " + lessJs.getAbsolutePath(), e);
 				}
 			}
-			if (watch){
-				getLog().info("Watching "+outputDirectory);
-				if (force){
-					force=false;
-					getLog().info("Disabled the 'force' flag in watch mode.");
-				}
-				Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-				while (watch && !Thread.currentThread().isInterrupted()){
-					compileIfChanged(files, lessCompiler);
-					try {
-						Thread.sleep(watchInterval);
-					} catch (InterruptedException e) {
-						System.out.println("interrupted");
-					}
-				}
-			} else {
-				compileIfChanged(files, lessCompiler);
-			}
-
-			getLog().info("Complete Less compile job finished in " + (System.currentTimeMillis() - start) + " ms");
-		}
-	}
-
-	private void compileIfChanged(String[] files, LessCompiler lessCompiler)
-			throws MojoExecutionException {
-		for (String file : files) {
-			File input = new File(sourceDirectory, file);
-
-			buildContext.removeMessages(input);
-
-			File output = new File(outputDirectory, file.replace(".less", ".css"));
-
-			if (!output.getParentFile().exists() && !output.getParentFile().mkdirs()) {
-				throw new MojoExecutionException("Cannot create output directory " + output.getParentFile());
-			}
-
-			try {
-				LessSource lessSource = new LessSource(input);
-				if (output.lastModified() < lessSource.getLastModifiedIncludingImports()) {
-					long compilationStarted = System.currentTimeMillis();
-					getLog().info("Compiling LESS source: " + file + "...");
-					lessCompiler.compile(lessSource, output, force);
-					buildContext.refresh(output);
-					getLog().info("Finished compilation to "+outputDirectory+" in " + (System.currentTimeMillis() - compilationStarted) + " ms");
-				}
-				else if (!watch) {
-						getLog().info("Bypassing LESS source: " + file + " (not modified)");
-				}
-			} catch (IOException e) {
-				buildContext.addMessage(input, 0, 0, "Error compiling LESS source", BuildContext.SEVERITY_ERROR, e);
-				throw new MojoExecutionException("Error while compiling LESS source: " + file, e);
-			} catch (LessException e) {
-				String message = e.getMessage();
-				if (StringUtils.isEmpty(message)) {
-					message = "Error compiling LESS source";
-				}
-				buildContext.addMessage(input, 0, 0, "Error compiling LESS source", BuildContext.SEVERITY_ERROR, e);
-				throw new MojoExecutionException("Error while compiling LESS source: " + file, e);
-			}
+			return lessCompiler;
 		}
 	}
 }
