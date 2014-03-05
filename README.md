@@ -68,6 +68,10 @@ List sources
 
 To list the LESS sources in your project the lesscss:list goal can be used. It lists the LESS sources and it's imports based on sourceDirectory and optionally includes and excludes configuration options.  
 
+ToDo
+----
++ Use http://commons.apache.org/proper/commons-vfs/apidocs/org/apache/commons/vfs2/impl/DefaultFileMonitor.html from http://commons.apache.org/proper/commons-vfs/ to watch the file system. This uses Java 5 instead of Java 7.
++ Use https://github.com/asual/lesscss-engine as a basis as this supports less 1.6.x which is needed for Bootstrap 3.1.x
 
 Support
 -------
