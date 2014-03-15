@@ -4,6 +4,7 @@ expected = """#header {
 h2 {
   color: #4d926f;
 }
+
 """
 
 css = new File(basedir, "target/test-1.33.7.css")
