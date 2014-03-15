@@ -457,6 +457,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		whenNew(File.class).withArguments(sourceDirectory, "less.less").thenReturn(input);
 		whenNew(File.class).withArguments(outputDirectory, "less-1.33.7.css").thenReturn(output);
 
+        when(output.exists()).thenReturn(true);
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(false);
 		when(parent.mkdirs()).thenReturn(true);
