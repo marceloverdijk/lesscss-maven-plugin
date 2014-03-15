@@ -61,7 +61,7 @@ All configuration options
 + lessJs (String) - The location of the LESS JavasSript file.
 + watch (boolean) - When true the plugin watches the sourceDirectory and recompiles the included files after they changed. Instead of configuring it in the pom you can use that option at the command line like this "mvn lesscss:compile -Dlesscss.watch=true". Then it doesn't interfere with other maven lifecycle phases and you can just kill the watch process e.g. with crtl-c. Default value is: false.
 + watchInterval (int) - The interval in milliseconds the plugin waits between the check for file changes. Default value is: 1000 ms.
-
++ skip (boolean) - Whether to skip plugin execution. Default value is: false.
 
 List sources
 ------------
