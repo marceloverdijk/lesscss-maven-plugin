@@ -121,6 +121,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		whenNew(File.class).withArguments(sourceDirectory, "less.less").thenReturn(input);
 		whenNew(File.class).withArguments(outputDirectory, "less.css").thenReturn(output);
 
+        when(output.exists()).thenReturn(true);
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
@@ -167,6 +168,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		whenNew(File.class).withArguments(sourceDirectory, "less.less").thenReturn(input);
 		whenNew(File.class).withArguments(outputDirectory, "less.css").thenReturn(output);
 
+        when(output.exists()).thenReturn(true);
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
@@ -329,6 +331,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		whenNew(File.class).withArguments(sourceDirectory, "less.less").thenReturn(input);
 		whenNew(File.class).withArguments(outputDirectory, "less.css").thenReturn(output);
 
+        when(output.exists()).thenReturn(true);
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
@@ -402,6 +405,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		whenNew(File.class).withArguments(sourceDirectory, "less.less").thenReturn(input);
 		whenNew(File.class).withArguments(outputDirectory, "less.css").thenReturn(output);
 
+        when(output.exists()).thenReturn(true);
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(false);
 		when(parent.mkdirs()).thenReturn(true);
