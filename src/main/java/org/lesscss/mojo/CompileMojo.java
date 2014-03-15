@@ -122,7 +122,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 			Object lessCompiler = initLessCompiler();
 			if (watch){
-				getLog().info("Watching "+outputDirectory);
+				getLog().info("Watching "+sourceDirectory);
 				if (force){
 					force=false;
 					getLog().info("Disabled the 'force' flag in watch mode.");

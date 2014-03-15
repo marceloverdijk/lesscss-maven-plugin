@@ -4,6 +4,7 @@ expected = """#header {
 h2 {
   color: #4d926f;
 }
+
 """
 
 css = new File(basedir, "target/custom-lessjs-testing/css/test.css")
