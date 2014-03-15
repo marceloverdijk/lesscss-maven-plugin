@@ -1,22 +1,23 @@
-
 (function (tree) {
 
-tree.Paren = function (node) {
+tree.Negative = function (node) {
     this.value = node;
 };
-tree.Paren.prototype = {
-    type: "Paren",
+tree.Negative.prototype = {
+    type: "Negative",
     accept: function (visitor) {
         this.value = visitor.visit(this.value);
     },
     genCSS: function (env, output) {
-        output.add('(');
+        output.add('-');
         this.value.genCSS(env, output);
-        output.add(')');
     },
     toCSS: tree.toCSS,
     eval: function (env) {
-        return new(tree.Paren)(this.value.eval(env));
+        if (env.isMathOn()) {
+            return (new(tree.Operation)('*', [new(tree.Dimension)(-1), this.value])).eval(env);
+        }
+        return new(tree.Negative)(this.value.eval(env));
     }
 };
 
