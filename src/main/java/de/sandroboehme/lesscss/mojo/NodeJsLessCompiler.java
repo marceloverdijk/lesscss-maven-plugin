@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lesscss.mojo;
+package de.sandroboehme.lesscss.mojo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,8 +25,9 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.logging.Log;
-import org.lesscss.LessException;
-import org.lesscss.LessSource;
+
+import de.sandroboehme.lesscss.LessException;
+import de.sandroboehme.lesscss.LessSource;
 
 public class NodeJsLessCompiler {
 
@@ -102,7 +103,7 @@ public class NodeJsLessCompiler {
     new File(tempDir, "less/tree").mkdirs();
     for (String resource : resources) {
       InputStream in = NodeJsLessCompiler.class.getClassLoader()
-          .getResourceAsStream("org/lesscss/mojo/js/" + resource);
+              .getResourceAsStream("de/sandroboehme/lesscss/mojo/js/" + resource);
       FileOutputStream out = new FileOutputStream(new File(tempDir, resource));
       IOUtils.copy(in, out);
       in.close();

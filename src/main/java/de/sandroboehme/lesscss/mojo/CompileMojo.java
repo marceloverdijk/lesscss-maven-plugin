@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lesscss.mojo;
+package de.sandroboehme.lesscss.mojo;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,10 +21,11 @@ import java.util.Arrays;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.StringUtils;
-import org.lesscss.LessCompiler;
-import org.lesscss.LessException;
-import org.lesscss.LessSource;
 import org.sonatype.plexus.build.incremental.BuildContext;
+
+import de.sandroboehme.lesscss.LessCompiler;
+import de.sandroboehme.lesscss.LessException;
+import de.sandroboehme.lesscss.LessSource;
 
 /**
  * Goal which compiles the LESS sources to CSS stylesheets.

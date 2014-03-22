@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lesscss.mojo;
+package de.sandroboehme.lesscss.mojo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +22,8 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.lesscss.LessSource;
+
+import de.sandroboehme.lesscss.LessSource;
 
 /**
  * Goal which list the LESS sources and its imports.

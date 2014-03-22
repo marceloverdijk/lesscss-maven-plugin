@@ -1,4 +1,4 @@
-package org.lesscss.mojo;
+package de.sandroboehme.lesscss.mojo;
 
 import java.io.File;
 
@@ -7,6 +7,8 @@ import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import de.sandroboehme.lesscss.mojo.CompileMojo;
 
 /**
  * Tests the watch mode of the CompileMojo.

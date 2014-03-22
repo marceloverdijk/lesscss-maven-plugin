@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lesscss.mojo;
+package de.sandroboehme.lesscss.mojo;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
@@ -28,11 +28,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.lesscss.mojo.AbstractLessCssMojo;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.sonatype.plexus.build.incremental.BuildContext;
+
+import de.sandroboehme.lesscss.mojo.AbstractLessCssMojo;
 
 @PrepareForTest(AbstractLessCssMojo.class)
 @RunWith(PowerMockRunner.class)

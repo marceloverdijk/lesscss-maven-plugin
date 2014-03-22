@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.lesscss</groupId>
+    <groupId>de.sandroboehme.lesscss</groupId>
     <artifactId>lesscss-maven-plugin</artifactId>
-    <version>1.5.1.1-SNAPSHOT</version>
+    <version>1.6.1.1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
-    <name>Official LESS CSS Maven Plugin</name>
-    <description>Official LESS CSS Maven Plugin</description>
-    <url>http://github.com/marceloverdijk/lesscss-maven-plugin</url>
+    <name>Fork of the official LESS CSS Maven Plugin</name>
+    <description>Fork of the official LESS CSS Maven Plugin</description>
+    <url>https://github.com/sandroboehme/lesscss-maven-plugin</url>
     
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -59,9 +59,9 @@
             <version>3.0</version>
         </dependency>
         <dependency>
-            <groupId>org.lesscss</groupId>
+            <groupId>de.sandroboehme.lesscss</groupId>
             <artifactId>lesscss</artifactId>
-            <version>1.5.1-SNAPSHOT</version>
+            <version>1.6.1.1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -161,13 +161,13 @@
     
     <issueManagement>
         <system>GitHub</system>
-        <url>http://github.com/marceloverdijk/lesscss-maven-plugin/issues</url>
+        <url>http://github.com/sandroboehme/lesscss-maven-plugin/issues</url>
     </issueManagement>
     
     <scm>
-        <connection>scm:git:git@github.com:marceloverdijk/lesscss-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:marceloverdijk/lesscss-maven-plugin.git</developerConnection>
-        <url>http://github.com/marceloverdijk/lesscss-maven-plugin</url>
+        <connection>scm:git:git@github.com:sandroboehme/lesscss-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:sandroboehme/lesscss-maven-plugin.git</developerConnection>
+        <url>https://github.com/sandroboehme/lesscss-maven-plugin</url>
     </scm>
     
     <prerequisites>

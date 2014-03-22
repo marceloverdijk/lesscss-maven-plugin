@@ -1,5 +1,9 @@
-Official LESS CSS Maven Plugin
+LESS CSS Maven Plugin
 ==============================
+
+Forked from the official Less CSS Maven Plugin at https://github.com/marceloverdijk/lesscss-maven-plugin
+
+**Latest release**  1.6.1.1.0 - compatible with less 1.6.1
 
 
 Usage
@@ -8,9 +12,9 @@ Usage
 Declare the plugin and its goals. The process-sources phase is bound to by default:
 
     <plugin>
-        <groupId>org.lesscss</groupId>
+        <groupId>de.sandroboehme.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.3.3</version>
+        <version>1.6.1.1.0</version>
         <executions>
             <execution>
                 <goals>
@@ -27,9 +31,9 @@ Example configuration for web project
 -------------------------------------
 
     <plugin>
-        <groupId>org.lesscss</groupId>
+        <groupId>de.sandroboehme.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.3.3</version>
+        <version>1.6.1.1.0</version>
         <configuration>
             <sourceDirectory>${project.basedir}/src/main/webapp/less</sourceDirectory>
             <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
@@ -72,7 +76,7 @@ To list the LESS sources in your project the lesscss:list goal can be used. It l
 Support
 -------
 
-Have a question, or found an issue? Just create a issue: https://github.com/marceloverdijk/lesscss-maven-plugin/issues
+Have a question, or found an issue? Just create a issue: https://github.com/sandroboehme/lesscss-maven-plugin/issues
 
 
 Authors
