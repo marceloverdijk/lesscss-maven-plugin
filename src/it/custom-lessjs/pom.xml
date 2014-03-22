@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.lesscss.it</groupId>
+    <groupId>de.sandroboehme.lesscss.it</groupId>
     <artifactId>custom-lessjs</artifactId>
     <version>testing</version>
     
     <build>
         <plugins>
             <plugin>
-                <groupId>org.lesscss</groupId>
+                <groupId>de.sandroboehme.lesscss</groupId>
                 <artifactId>lesscss-maven-plugin</artifactId>
                 <version>@project.version@</version>
                 <configuration>
-                    <lessJs>${project.basedir}/src/main/webapp/js/less-1.1.3.min.js</lessJs>
+                    <lessJs>${project.basedir}/src/main/webapp/js/less-rhino-1.6.2.js</lessJs>
                     <sourceDirectory>${project.basedir}/src/main/webapp/less</sourceDirectory>
                     <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
                 </configuration>

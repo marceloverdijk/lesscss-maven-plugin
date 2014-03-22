@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.sandroboehme.lesscss.it</groupId>
+    <artifactId>filena-emsuffix</artifactId>
+    <version>testing</version>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>de.sandroboehme.lesscss</groupId>
+                <artifactId>lesscss-maven-plugin</artifactId>
+                <version>@project.version@</version>
+                <configuration>
+                  <outputFileSuffix>-1.33.7</outputFileSuffix>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>

@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.lesscss</groupId>
+    <groupId>de.sandroboehme.lesscss</groupId>
     <artifactId>lesscss-maven-plugin</artifactId>
-    <version>1.3.3.1-SNAPSHOT</version>
+    <version>1.6.1.1.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
-    <name>Official LESS CSS Maven Plugin</name>
-    <description>Official LESS CSS Maven Plugin</description>
-    <url>http://github.com/marceloverdijk/lesscss-maven-plugin</url>
+    <name>Fork of the official LESS CSS Maven Plugin</name>
+    <description>Fork of the official LESS CSS Maven Plugin</description>
+    <url>https://github.com/sandroboehme/lesscss-maven-plugin</url>
     
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -40,8 +40,18 @@
         <dependency>
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
-            <version>1.2</version>
+            <version>1.3</version>
             <scope>test</scope>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>slf4j-jdk14</artifactId>
+            		<groupId>org.slf4j</groupId>
+            	</exclusion>
+            	<exclusion>
+            		<artifactId>slf4j-nop</artifactId>
+            		<groupId>org.slf4j</groupId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
@@ -49,9 +59,9 @@
             <version>3.0</version>
         </dependency>
         <dependency>
-            <groupId>org.lesscss</groupId>
+            <groupId>de.sandroboehme.lesscss</groupId>
             <artifactId>lesscss</artifactId>
-            <version>1.3.3</version>
+            <version>1.6.1.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -59,7 +69,7 @@
             <version>1.9.0</version> 
             <scope>test</scope>
         </dependency>
-                <dependency>
+        <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
             <version>1.4.11</version>
@@ -101,6 +111,10 @@
                     <postBuildHookScript>verify</postBuildHookScript>
                     <projectsDirectory>src/it</projectsDirectory>
                     <settingsFile>src/it/settings.xml</settingsFile>
+					<!--
+					For debugging the integration tests:                     
+					<mavenOpts>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000</mavenOpts> 
+					-->
                 </configuration>
                 <executions>
                     <execution>
@@ -147,13 +161,13 @@
     
     <issueManagement>
         <system>GitHub</system>
-        <url>http://github.com/marceloverdijk/lesscss-maven-plugin/issues</url>
+        <url>http://github.com/sandroboehme/lesscss-maven-plugin/issues</url>
     </issueManagement>
     
     <scm>
-        <connection>scm:git:git@github.com:marceloverdijk/lesscss-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:marceloverdijk/lesscss-maven-plugin.git</developerConnection>
-        <url>http://github.com/marceloverdijk/lesscss-maven-plugin</url>
+        <connection>scm:git:git@github.com:sandroboehme/lesscss-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:sandroboehme/lesscss-maven-plugin.git</developerConnection>
+        <url>https://github.com/sandroboehme/lesscss-maven-plugin</url>
     </scm>
     
     <prerequisites>
