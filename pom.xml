@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.sandroboehme.lesscss</groupId>
     <artifactId>lesscss-maven-plugin</artifactId>
-    <version>1.6.1.1.0-SNAPSHOT</version>
+    <version>1.6.1.1.0</version>
     <packaging>maven-plugin</packaging>
     <name>Fork of the official LESS CSS Maven Plugin</name>
     <description>Fork of the official LESS CSS Maven Plugin</description>
