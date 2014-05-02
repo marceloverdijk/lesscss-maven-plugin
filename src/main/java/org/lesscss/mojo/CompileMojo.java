@@ -134,7 +134,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 					try {
 						LessSource lessSource = new LessSource(input);
 	
-						if (output.lastModified() < lessSource.getLastModifiedIncludingImports()) {
+						if (output.lastModified() < lessSource.getLastModifiedIncludingImports() || force) {
 							getLog().info("Compiling LESS source: " + file + "...");
 							if (lessCompiler instanceof LessCompiler) {
 								((LessCompiler) lessCompiler).compile(lessSource, output, force);
