@@ -77,6 +77,15 @@ public class CompileMojo extends AbstractLessCssMojo {
 	 * @parameter
 	 */
 	private String nodeExecutable;
+        
+	/**
+	 * The format of the output file names.
+	 *
+	 * @parameter
+	 */
+	private String outputFileFormat;
+        
+        private static final String FILE_NAME_FORMAT_PARAMETER_REGEX = "\\{fileName\\}";
 
 	/**
 	 * Execute the MOJO.
@@ -112,7 +121,10 @@ public class CompileMojo extends AbstractLessCssMojo {
 					File input = new File(sourceDirectory, file);
 	
 					buildContext.removeMessages(input);
-	
+                                        
+                                        if(outputFileFormat != null){
+                                            file = outputFileFormat.replaceAll(FILE_NAME_FORMAT_PARAMETER_REGEX, file.replace(".less", ""));
+                                        }
 					File output = new File(outputDirectory, file.replace(".less", ".css"));
 	
 					if (!output.getParentFile().exists() && !output.getParentFile().mkdirs()) {
@@ -122,7 +134,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 					try {
 						LessSource lessSource = new LessSource(input);
 	
-						if (output.lastModified() < lessSource.getLastModifiedIncludingImports() || force) {
+						if (output.lastModified() < lessSource.getLastModifiedIncludingImports()) {
 							getLog().info("Compiling LESS source: " + file + "...");
 							if (lessCompiler instanceof LessCompiler) {
 								((LessCompiler) lessCompiler).compile(lessSource, output, force);
