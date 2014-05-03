@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.lesscss</groupId>
     <artifactId>lesscss-maven-plugin</artifactId>
-    <version>1.5.1.1-SNAPSHOT</version>
+    <version>1.7.0.1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <name>Official LESS CSS Maven Plugin</name>
     <description>Official LESS CSS Maven Plugin</description>
@@ -25,6 +25,11 @@
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -61,7 +66,7 @@
         <dependency>
             <groupId>org.lesscss</groupId>
             <artifactId>lesscss</artifactId>
-            <version>1.5.1-SNAPSHOT</version>
+            <version>1.7.0.1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
