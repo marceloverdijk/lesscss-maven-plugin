@@ -51,15 +51,22 @@ Example configuration for web project
 All configuration options
 -------------------------
 
-+ outputDirectory (File) - The directory for compiled CSS stylesheets. Default value is: ${project.build.directory}.
-+ sourceDirectory (File) - The source directory containing the LESS sources. Default value is: ${project.basedir}/src/main/less.
-+ compress (boolean) - When true the LESS compiler will compress the CSS stylesheets. Default value is: false.
-+ encoding (String) The character encoding the LESS compiler will use for writing the CSS stylesheets. Default value is: ${project.build.sourceEncoding}.
-+ excludes (String[]) - List of files to exclude. Specified as fileset patterns which are relative to the source directory.
-+ force (boolean) - When true forces the LESS compiler to always compile the LESS sources. By default LESS sources are only compiled when modified (including imports) or the CSS stylesheet does not exists. Default value is: false.
-+ includes (String[]) - List of files to include. Specified as fileset patterns which are relative to the source directory. Default value is: { "**\/*.less" }
-+ lessJs (String) - The location of the LESS JavasSript file.
++ **outputDirectory** `File` - The directory for compiled CSS stylesheets. Default value is: ${project.build.directory}.
 
++ **sourceDirectory** `File` - The source directory containing the LESS sources. Default value is: ${project.basedir}/src/main/less.
+
++ **compress** `boolean` - When true the LESS compiler will compress the CSS stylesheets. Default value is: false.
++ **encoding** `String` The character encoding the LESS compiler will use for writing the CSS stylesheets. Default value is: ${project.build.sourceEncoding}.
+
++ **excludes** `String[]` - List of files to exclude. Specified as fileset patterns which are relative to the source directory.
+
++ **force** `boolean` - When true forces the LESS compiler to always compile the LESS sources. By default LESS sources are only compiled when modified (including imports) or the CSS stylesheet does not exists. Default value is: false.
+
++ **includes** `String[]` - List of files to include. Specified as fileset patterns which are relative to the source directory. Default value is: { "**\/*.less" }
+
++ **lessJs** `String` - The location of the LESS JavaScript file.
+
++ **outputFileFormat** `String` - The format of the output files. Default is: '{fileName}.css'. examples: '{fileName}.min.css', 'min-{fileName}.css', '{fileName}.anything'.
 
 List sources
 ------------
