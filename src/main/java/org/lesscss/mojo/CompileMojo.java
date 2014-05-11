@@ -44,13 +44,6 @@ public class CompileMojo extends AbstractLessCssMojo {
 	protected File outputDirectory;
 
 	/**
-	 * An optional suffix to append to each output filename, before the .less extension
-	 *
-	 * @parameter expression="${lesscss.outputFileSuffix}"
-	 */
-	private String outputFileSuffix = "";
-
-	/**
 	 * When <code>true</code> the LESS compiler will compress the CSS stylesheets.
 	 * 
 	 * @parameter expression="${lesscss.compress}" default-value="false"
@@ -98,6 +91,15 @@ public class CompileMojo extends AbstractLessCssMojo {
 	 * @parameter
 	 */
 	private String nodeExecutable;
+        
+	/**
+	 * The format of the output file names.
+	 *
+	 * @parameter
+	 */
+	private String outputFileFormat;
+        
+        private static final String FILE_NAME_FORMAT_PARAMETER_REGEX = "\\{fileName\\}";
 
 	/**
 	 * Execute the MOJO.
@@ -109,7 +111,6 @@ public class CompileMojo extends AbstractLessCssMojo {
 		if (getLog().isDebugEnabled()) {
 			getLog().debug("sourceDirectory = " + sourceDirectory);
 			getLog().debug("outputDirectory = " + outputDirectory);
-			getLog().debug("outputFileSuffix = " + outputFileSuffix);
 			getLog().debug("includes = " + Arrays.toString(includes));
 			getLog().debug("excludes = " + Arrays.toString(excludes));
 			getLog().debug("force = " + force);
@@ -167,10 +168,11 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 				buildContext.removeMessages(input);
 
-				String filename = file.replace(".less", "%s.css");
-				filename = String.format(filename, outputFileSuffix);
+                if(outputFileFormat != null){
+                    file = outputFileFormat.replaceAll(FILE_NAME_FORMAT_PARAMETER_REGEX, file.replace(".less", ""));
+                }
 
-				File output = new File(outputDirectory, filename);
+				File output = new File(outputDirectory, file.replace(".less", ".css"));
 
 				if (!output.getParentFile().exists() && !output.getParentFile().mkdirs()) {
 					throw new MojoExecutionException("Cannot create output directory " + output.getParentFile());

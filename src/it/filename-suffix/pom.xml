@@ -2,7 +2,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.lesscss.it</groupId>
-    <artifactId>filena-emsuffix</artifactId>
+    <artifactId>filename-suffix</artifactId>
     <version>testing</version>
     
     <build>
@@ -12,7 +12,7 @@
                 <artifactId>lesscss-maven-plugin</artifactId>
                 <version>@project.version@</version>
                 <configuration>
-                  <outputFileSuffix>-1.33.7</outputFileSuffix>
+                  <outputFileFormat>min-{fileName}-1.33.7.css</outputFileFormat>
                 </configuration>
                 <executions>
                     <execution>
