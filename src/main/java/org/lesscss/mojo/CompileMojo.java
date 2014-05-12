@@ -77,7 +77,7 @@ public class CompileMojo extends AbstractLessCssMojo {
    * 
    * @parameter
    */
-  private String nodeExecutable;
+  private File nodeExecutable;
 
   /**
    * Execute the MOJO.
@@ -162,7 +162,7 @@ public class CompileMojo extends AbstractLessCssMojo {
     if (nodeExecutable != null) {
       NodeJsLessCompiler lessCompiler;
       try {
-        lessCompiler = new NodeJsLessCompiler(compress, encoding, getLog());
+        lessCompiler = new NodeJsLessCompiler(nodeExecutable, compress, encoding, getLog());
       } catch (IOException e) {
         throw new MojoExecutionException(e.getMessage(), e);
       }
