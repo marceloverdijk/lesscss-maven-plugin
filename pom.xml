@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.lesscss</groupId>
     <artifactId>lesscss-maven-plugin</artifactId>
-    <version>1.7.0.1.0</version>
+    <version>1.7.0.1.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <name>Official LESS CSS Maven Plugin</name>
     <description>Official LESS CSS Maven Plugin</description>
