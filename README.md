@@ -1,7 +1,7 @@
 Official LESS CSS Maven Plugin
 ==============================
 
-**Latest release**  1.7.0.1.0-SNAPSHOT - The 1.0 release that is compatible with less 1.7.0 
+**Latest release**  1.7.0.1.0 - The 1.0 release that is compatible with less 1.7.0 
 
 
 Usage
@@ -12,7 +12,7 @@ Declare the plugin and its goals. The process-sources phase is bound to by defau
     <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.7.0.1.0-SNAPSHOT</version>
+        <version>1.7.0.1.0</version>
         <executions>
             <execution>
                 <goals>
@@ -31,7 +31,7 @@ Example configuration for web project
     <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.7.0.1.0-SNAPSHOT</version>
+        <version>1.7.0.1.0</version>
         <configuration>
             <sourceDirectory>${project.basedir}/src/main/webapp/less</sourceDirectory>
             <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
