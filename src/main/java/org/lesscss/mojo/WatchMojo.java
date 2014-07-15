@@ -3,7 +3,7 @@ package org.lesscss.mojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
 /**
- * Goal which compiles the LESS sources to CSS stylesheets.
+ * Goal which will watch for changes in LESS files and compile if it detects one.
  *
  * @author Marcel Overdijk
  * @goal watch
