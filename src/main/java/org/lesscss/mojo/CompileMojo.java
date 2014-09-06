@@ -14,8 +14,10 @@
  */
 package org.lesscss.mojo;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 
@@ -91,21 +93,21 @@ public class CompileMojo extends AbstractLessCssMojo {
 	 * @parameter
 	 */
 	private String nodeExecutable;
-        
+	
 	/**
 	 * The format of the output file names.
 	 *
 	 * @parameter
 	 */
 	private String outputFileFormat;
-        
-        private static final String FILE_NAME_FORMAT_PARAMETER_REGEX = "\\{fileName\\}";
+
+	private static final String FILE_NAME_FORMAT_PARAMETER_REGEX = "\\{fileName\\}";
 
 	/**
 	 * Execute the MOJO.
 	 * 
 	 * @throws MojoExecutionException
-	 *             if something unexpected occurs.
+	 *     if something unexpected occurs.
 	 */
 	public void execute() throws MojoExecutionException {
 		if (getLog().isDebugEnabled()) {
@@ -157,7 +159,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 				compileIfChanged(files, lessCompiler);
 			}
 
-			getLog().info("Complete Less compile job finished in " + (System.currentTimeMillis() - start) + " ms");
+			getLog().info("Complete LESS compile job finished in " + (System.currentTimeMillis() - start) + " ms");
 		}
 	}
 
@@ -168,9 +170,9 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 				buildContext.removeMessages(input);
 
-                if(outputFileFormat != null){
-                    file = outputFileFormat.replaceAll(FILE_NAME_FORMAT_PARAMETER_REGEX, file.replace(".less", ""));
-                }
+				if(outputFileFormat != null){
+					file = outputFileFormat.replaceAll(FILE_NAME_FORMAT_PARAMETER_REGEX, file.replace(".less", ""));
+				}
 
 				File output = new File(outputDirectory, file.replace(".less", ".css"));
 
@@ -183,10 +185,25 @@ public class CompileMojo extends AbstractLessCssMojo {
 					if (force || !output.exists() || output.lastModified() < lessSource.getLastModifiedIncludingImports()) {
 						long compilationStarted = System.currentTimeMillis();
 						getLog().info("Compiling LESS source: " + file + "...");
-						if (lessCompiler instanceof LessCompiler) {
-							((LessCompiler) lessCompiler).compile(lessSource, output, force);
-						} else {
-							((NodeJsLessCompiler) lessCompiler).compile(lessSource, output, force);
+						// Reference the existing STDOUT PrintStream for later rebinding
+						PrintStream stdout = System.out;
+						// Register a custom OutputStream to STDOUT since calls
+						// to console.log() by the compilers are sent to STDOUT
+						// and this way we can redirect the output to the plugin
+						// logger
+						LogOutputStream outputStream = new LogOutputStream("STDOUT");
+						try {
+							System.setOut(new PrintStream(outputStream, true));
+							if (lessCompiler instanceof LessCompiler) {
+								((LessCompiler) lessCompiler).compile(lessSource, output, force);
+							} else {
+								((NodeJsLessCompiler) lessCompiler).compile(lessSource, output, force);
+							}
+						} finally {
+							// Re-bind the original STDOUT PrintStream to System.out
+							System.setOut(stdout);
+							// Print the captured output from the compilation step
+							printCapturedOutput(outputStream.getOutput());
 						}
 						buildContext.refresh(output);
 						getLog().info("Finished compilation to "+outputDirectory+" in " + (System.currentTimeMillis() - compilationStarted) + " ms");
@@ -216,6 +233,12 @@ public class CompileMojo extends AbstractLessCssMojo {
 		}
 	}
 
+	private void printCapturedOutput(String capturedOutput) {
+		if ( !capturedOutput.isEmpty() ) {
+			getLog().info(capturedOutput.trim());
+		}
+	}
+	
 	private Object initLessCompiler() throws MojoExecutionException {
 		if (nodeExecutable != null) {
 			NodeJsLessCompiler lessCompiler;
@@ -242,6 +265,53 @@ public class CompileMojo extends AbstractLessCssMojo {
 				}
 			}
 			return lessCompiler;
+		}
+	}
+	
+	/**
+	 * Class to use as an output stream when creating a PrintStream object 
+	 * that will intercept output sent to System.out and will buffer the
+	 * passed output until called by getOutput().
+	 */
+	private static class LogOutputStream extends ByteArrayOutputStream {
+		private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+		private final StringBuilder stringBuilder;
+		private final String outputPrefix;
+		
+		LogOutputStream(String prefix) {
+			super();
+			outputPrefix = prefix;
+			// Initialize a StringBuilder to store the trapped output
+			stringBuilder = new StringBuilder("");
+		}
+		
+		@Override
+		public void flush() throws IOException {
+			synchronized(this) {
+				// Get the contents of the stream, append it to the StringBuilder
+				// if it isn't blank or just line separators, and reset the stream contents.
+				super.flush();
+				String content = toString();
+				if ( !content.trim().isEmpty() ) {
+					stringBuilder.append("[").append(outputPrefix).append("] ")
+							.append(content.trim())
+							.append(LINE_SEPARATOR);
+				}
+				super.reset();
+			}
+		}
+		
+		/**
+		 * Method for getting the content captured
+		 */
+		public String getOutput() {
+			String output = stringBuilder.toString();
+			if ( !output.isEmpty() ) {
+			    return outputPrefix + " output captured:" + LINE_SEPARATOR + output;
+			}
+			else {
+				return "";
+			}
 		}
 	}
 }
