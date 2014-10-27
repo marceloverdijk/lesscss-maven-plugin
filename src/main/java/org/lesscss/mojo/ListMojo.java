@@ -22,14 +22,15 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.lesscss.LessSource;
 
 /**
  * Goal which list the LESS sources and its imports.
  * 
  * @author Marcel Overdijk
- * @goal list
  */
+@Mojo( name = "list" )
 public class ListMojo extends AbstractLessCssMojo {
 
 	/**
