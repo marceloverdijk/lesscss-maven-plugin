@@ -20,6 +20,9 @@ import java.net.MalformedURLException;
 import java.util.Arrays;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.StringUtils;
 import org.lesscss.LessCompiler;
 import org.lesscss.LessException;
@@ -30,76 +33,74 @@ import org.sonatype.plexus.build.incremental.BuildContext;
  * Goal which compiles the LESS sources to CSS stylesheets.
  * 
  * @author Marcel Overdijk
- * @goal compile
- * @phase process-sources
  */
+@Mojo( name = "compile", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true )
 public class CompileMojo extends AbstractLessCssMojo {
 
 	/**
 	 * The directory for compiled CSS stylesheets.
 	 * 
-	 * @parameter expression="${lesscss.outputDirectory}" default-value="${project.build.directory}"
-	 * @required
 	 */
+    @Parameter( defaultValue = "${project.build.directory}", property = "lesscss.outputDirectory", required = true )
 	protected File outputDirectory;
 
 	/**
 	 * When <code>true</code> the LESS compiler will compress the CSS stylesheets.
 	 * 
-	 * @parameter expression="${lesscss.compress}" default-value="false"
 	 */
+    @Parameter( defaultValue = "false", property = "lesscss.compress" )
 	private boolean compress;
 
 	/**
 	 * When <code>true</code> the plugin will watch for changes in LESS files and compile if it detects one.
 	 * 
-	 * @parameter expression="${lesscss.watch}" default-value="false"
 	 */
+    @Parameter( defaultValue = "false", property = "lesscss.watch" )
 	protected boolean watch=false;
 
 	/**
 	 * When <code>true</code> the plugin will watch for changes in LESS files and compile if it detects one.
 	 * 
-	 * @parameter expression="${lesscss.watchInterval}" default-value="1000"
 	 */
+    @Parameter( defaultValue = "1000", property = "lesscss.watchInterval" )
 	private int watchInterval=1000;
 
 	/**
 	 * The character encoding the LESS compiler will use for writing the CSS stylesheets.
 	 * 
-	 * @parameter expression="${lesscss.encoding}" default-value="${project.build.sourceEncoding}"
 	 */
+    @Parameter( defaultValue = "${project.build.sourceEncoding}", property = "lesscss.encoding" )
 	private String encoding;
 
 	/**
 	 * When <code>true</code> forces the LESS compiler to always compile the LESS sources. By default LESS sources are only compiled when modified (including imports) or the CSS stylesheet does not exists.
 	 * 
-	 * @parameter expression="${lesscss.force}" default-value="false"
 	 */
+    @Parameter( defaultValue = "false", property = "lesscss.force" )
 	private boolean force;
 
 	/**
 	 * The location of the LESS JavasSript file.
 	 * 
-	 * @parameter
 	 */
+    @Parameter
 	private File lessJs;
 
 	/**
 	 * The location of the NodeJS executable.
 	 *
-	 * @parameter
 	 */
+    @Parameter
 	private String nodeExecutable;
         
 	/**
 	 * The format of the output file names.
 	 *
-	 * @parameter
 	 */
+    @Parameter
 	private String outputFileFormat;
         
-        private static final String FILE_NAME_FORMAT_PARAMETER_REGEX = "\\{fileName\\}";
+    private static final String FILE_NAME_FORMAT_PARAMETER_REGEX = "\\{fileName\\}";
 
 	/**
 	 * Execute the MOJO.

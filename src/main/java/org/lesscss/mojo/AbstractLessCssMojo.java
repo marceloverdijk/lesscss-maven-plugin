@@ -17,6 +17,8 @@ package org.lesscss.mojo;
 import java.io.File;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.Scanner;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
@@ -27,29 +29,28 @@ import org.sonatype.plexus.build.incremental.BuildContext;
  */
 public abstract class AbstractLessCssMojo extends AbstractMojo {
 
-	/** @component */
+    @Component
 	protected BuildContext buildContext;
 
 	/**
 	 * The source directory containing the LESS sources.
 	 * 
-	 * @parameter expression="${lesscss.sourceDirectory}" default-value="${project.basedir}/src/main/less"
-	 * @required
 	 */
+    @Parameter( defaultValue = "${project.basedir}/src/main/less", property = "lesscss.sourceDirectory", required = true)
 	protected File sourceDirectory;
 
 	/**
 	 * List of files to include. Specified as fileset patterns which are relative to the source directory. Default value is: { "**\/*.less" }
 	 * 
-	 * @parameter
 	 */
+    @Parameter
 	protected String[] includes = new String[] { "**/*.less" };
 
 	/**
 	 * List of files to exclude. Specified as fileset patterns which are relative to the source directory.
 	 * 
-	 * @parameter
 	 */
+    @Parameter
 	protected String[] excludes = new String[] {};
 
 	/**
@@ -69,7 +70,7 @@ public abstract class AbstractLessCssMojo extends AbstractMojo {
 	 * Whether to skip plugin execution. 
 	 * This makes the build more controllable from profiles.
 	 * 
-	 * @parameter expression="${lesscss.skip}" default-value="false"
 	 */
+    @Parameter( defaultValue = "false", property = "lesscss.skip")
 	protected boolean skip;
 }
